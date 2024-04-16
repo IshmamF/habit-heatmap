@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #2a7479; /* random color, change based off of your preference */
+    background: #6481c5; /* change colors later */
     padding: 15px 7%;
     transition: 0.5s;
 }
@@ -26,6 +26,12 @@ ul li{
     margin: 10px 20px;
     font-size: 15px;
     cursor: pointer;
+    
+}
+
+.navbar-link{
+    text-decoration: none;
+    color: white;
 }
 
 /* Toggle icon styles */
