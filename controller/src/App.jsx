@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar/Navbar';
+import Heatmap from './components/heatmap';
 import { Routes, Route } from "react-router-dom";
 import About from './components/Pages/About';
 import Settings from './components/Pages/Settings';
@@ -24,17 +25,21 @@ const App = () => {
 
   // Renders the navbar component with the current theme.
   return (
-    <div className={`container ${theme}`}>
-      <Navbar theme={theme} setTheme={toggleTheme} />
+    <div>
+      <div className={`container ${theme}`}>
+        <Navbar theme={theme} setTheme={toggleTheme} />
 
-      {/* react router routes */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/accountability-partner" element={<AccountabilityPartner />} />
-        <Route path="/add-habit" element={<AddHabit />} />
-      </Routes>
+        {/* react router routes */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/accountability-partner" element={<AccountabilityPartner />} />
+          <Route path="/add-habit" element={<AddHabit />} />
+        </Routes>
+
+       <Heatmap></Heatmap> 
+      </div>
     </div>
   );
 }
