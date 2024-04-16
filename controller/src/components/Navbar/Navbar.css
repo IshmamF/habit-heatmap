@@ -1,0 +1,91 @@
+/* Navbar styles*/
+.navbar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #6481c5; /* change colors later */
+    padding: 15px 7%;
+    transition: 0.5s;
+}
+
+/* Logo styles */
+.logo{
+    width: 160px;
+    cursor: pointer;
+}
+
+/* Menu styles */
+ul{
+    flex: 1;
+    list-style: none;
+    text-align: center;
+}
+ul li{
+    display: inline-block;
+    margin: 10px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    
+}
+
+.navbar-link{
+    text-decoration: none;
+    color: white;
+}
+
+/* Toggle icon styles */
+.toggle-icon{
+    width: 50px;
+    cursor: pointer;
+    margin-left: 40px;
+}
+
+/* Search box styles */
+
+/*.search-box{
+    display: flex;
+    align-items: center;
+    background: #242424;
+    padding: 10px 20px;
+    border-radius: 50px;
+}*/
+
+/*.search-box input{
+    background: transparent;
+    padding: 6px;
+    border: 0;
+    outline: 0;
+    color: #fff;
+    font-size: 18px;
+    max-width: 200px;
+}*/
+
+/*.search-box input::placeholder{
+    color: #fff;
+}*/
+
+/*.search-box img{
+    width: 20px;
+    cursor: pointer;
+}*/
+
+/* Dark mode styles */
+.dark .navbar{
+    background: #000000;
+    color: #fff;
+}
+
+/* Dark mode search box styles */
+
+/*.dark .search-box{
+    background: #fff;
+}*/
+
+/*.dark .search-box input{
+    background: #fff;
+}*/
+
+/*.dark .search-box input::placeholder{
+    color: #222;
+}*/
