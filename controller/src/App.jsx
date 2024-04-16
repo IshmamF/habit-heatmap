@@ -7,6 +7,8 @@ import Settings from './components/Pages/Settings';
 import Home from './components/Pages/Home';
 import AccountabilityPartner from './components/Pages/AccountabilityPartner';
 import AddHabit from './components/Pages/AddHabit';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const App = () => {
   // Grabs the current theme from localStorage, if it's unable to do this => default to light.
