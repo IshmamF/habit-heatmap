@@ -1,5 +1,5 @@
 {
-  "name": "habit-heatmap",
+  "name": "controller",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
