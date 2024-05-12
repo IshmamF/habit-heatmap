@@ -45,7 +45,7 @@ export default function Heatmap() {
                     color: {
                         type: 'threshold',
                         range: ['#14432a', '#166b34', '#37a446', '#4dd05a'],
-                        domain: [1, 5, 10],
+                        domain: [1,3,5,8],
                     },
                 },
                 domain: {
