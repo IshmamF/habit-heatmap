@@ -27,10 +27,16 @@ const Heatmap = () => {
                 range: 8,
                 scale: {
                     color: {
+<<<<<<< Updated upstream
                         type: 'quantize',
                         // New gray color scale
                         range: ['#f0f0f0', '#d9d9d9', '#bdbdbd', '#969696', '#737373', '#525252', '#252525', '#000000'],
                         domain: [0, 1, 2, 3, 4, 5, 6, 7],
+=======
+                        type: 'threshold',
+                        range: ['#14432a', '#166b34', '#37a446', '#4dd05a'],
+                        domain: [1,3,5,8],
+>>>>>>> Stashed changes
                     },
                 },
                 domain: {
