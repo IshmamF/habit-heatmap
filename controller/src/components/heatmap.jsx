@@ -29,7 +29,7 @@ export default function Heatmap() {
             }
         }
 
-        // Configure CalHeatmap with the generated data
+        // Configure the heat map with the generated data
         cal && cal.paint(
             {
                 data: {
@@ -92,7 +92,7 @@ export default function Heatmap() {
             ]
         );
 
-        // Return a cleanup function to destroy the CalHeatmap instance when the component unmounts
+        // destroy function to ensure the heatmap doesn't create duplicates.
         return () => {
             if (cal) {
                 cal.destroy();
@@ -153,7 +153,7 @@ export default function Heatmap() {
                 ></div>
                 <span style={{ color: theme === 'light' ? '#768390' : '#adbac7', fontSize: 12 }}>More</span>
             </div>
-            <button onClick={toggleTheme}>Toggle Theme</button> {/* you should try making the heat map change color automatically. */}
+            <button onClick={toggleTheme}>Toggle Theme</button> {/* you should try making the heat map change color automatically. do later */}
         </div>
     );
 }
