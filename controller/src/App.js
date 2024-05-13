@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import AddHabit from './components/Pages/AddHabit';
-import AccountabilityPartner from './components/Pages/AccountabilityPartner';
+import Habit from './components/Pages/Habit';
 import Home from './components/Pages/Home';
 import About from './components/Pages/About';
 import Settings from './components/Pages/Settings';
-import Heatmap from './components/heatmap';
 
 const App = () => {
   const currentTheme = localStorage.getItem('current_theme');
@@ -30,11 +29,10 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/accountability-partner" element={<AccountabilityPartner />} />
+          <Route path="/habits" element={<Habit />} />
           <Route path="/add-habit" element={<AddHabit />} />
         </Routes>
 
-        <Heatmap theme={theme} />
       </div>
     </div>
   );

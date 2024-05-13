@@ -14,7 +14,7 @@ const Navbar = ({ theme, toggleTheme }) => {
             <ul className="flex space-x-4">
                 <li><Link to="/" className="navbar-link transition-colors ">Home</Link></li>
                 <li><Link to="/add-habit" className="navbar-link transition-colors">Add Habit</Link></li>
-                <li><Link to="/accountability-partner" className="navbar-link transition-colors">Accountability Partner</Link></li>
+                <li><Link to="/habits" className="navbar-link transition-colors">Habits</Link></li>
                 <li><Link to="/settings" className="navbar-link transition-colors">Settings</Link></li>
                 <li><Link to="/about" className="navbar-link transition-colors">About</Link></li>
             </ul>
