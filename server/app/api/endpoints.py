@@ -63,7 +63,7 @@ def add_metric():
     try:
         # Add the map to the database
         addHeatMap(req)
-        return jsonify({"msg": "Habit updated successfully."}), 200
+        return jsonify({"msg": "Data added to Habit successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
     

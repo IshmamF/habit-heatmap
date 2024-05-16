@@ -66,13 +66,17 @@ def addHeatMap(request):
     try:
         username = request["username"]
         habitName = request["habitName"]
-        habitData = request["habitData"]
+        habitData = request["data"]
 
-        heatmaps.find_one_and_update(
-            {"username": username},
-            {"$push": {f"habits.{habitName}.data": habitData}},
-            upsert=True
-        )
+        # Find the index of the habit object in the habits array
+        habit_index = next((i for i, habit in enumerate(heatmaps.find_one({"username": username})["habits"]) if habit['habitName'] == habitName), None)
+
+        if habit_index is not None:
+            heatmaps.find_one_and_update(
+                {"username": username},
+                {"$push": {f"habits.{habit_index}.data": habitData}},
+                upsert=True
+            )
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
     
@@ -105,11 +109,10 @@ def createHeatmap(request):
         habit_color = request.get("color") 
 
         new_habit = {
-            habitName:  {
-                "data": [],
-                "metric": habit_metric,
-                "color": habit_color
-            }
+            "habitName": habitName,
+            "data": [],
+            "metric": habit_metric,
+            "color": habit_color
         } 
 
         heatmaps.find_one_and_update(
