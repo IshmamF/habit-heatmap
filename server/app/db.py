@@ -105,6 +105,19 @@ def getHabits(username):
         return {"habits": result["habits"]}
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
+
+def removeHabit(request):
+    try:
+        username = request["username"]
+        habitName = request["habitName"]
+
+        heatmaps.find_one_and_update(
+            {"username": username},
+            {"$pull": {"habits": {"habitName": habitName}}},
+            upsert=True
+        )
+    except Exception as e:
+        raise Exception(f"An error occurred: {e}")
     
 def createHeatmap(request): 
     try:

@@ -9,7 +9,8 @@ from app.db import (
     addUser,
     authenticate,
     getHabits,
-    createHeatmap
+    createHeatmap,
+    removeHabit
 )
 
 from flask_cors import CORS
@@ -79,7 +80,7 @@ def add_habit():
         return jsonify({"msg": str(e)}), 400    
 
 @api_v1.route("/removeMetric", methods=["POST"])
-def remove_map():
+def remove_metric():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
     req = request.get_json()
@@ -87,6 +88,18 @@ def remove_map():
         # Remove the map from the database
         removeMetric(req)
         return jsonify({"msg": "Metric removed successfully."}), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 400
+    
+@api_v1.route("/removeHabit", methods=["POST"])
+def remove_habit():
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
+    req = request.get_json()
+    try:
+        # Remove the map from the database
+        removeHabit(req)
+        return jsonify({"msg": "habit removed successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
     
