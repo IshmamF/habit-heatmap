@@ -4,7 +4,7 @@ import bson
 import json
 from app.db import (
     addHeatMap,
-    removeHeatMap,
+    removeMetric,
     test_db_connection,
     addUser,
     authenticate,
@@ -78,15 +78,15 @@ def add_habit():
     except Exception as e:
         return jsonify({"msg": str(e)}), 400    
 
-@api_v1.route("/removeHeatMap", methods=["GET"])
+@api_v1.route("/removeMetric", methods=["POST"])
 def remove_map():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
     req = request.get_json()
     try:
         # Remove the map from the database
-        removeHeatMap(req)
-        return jsonify({"msg": "Habit removed successfully."}), 200
+        removeMetric(req)
+        return jsonify({"msg": "Metric removed successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
     

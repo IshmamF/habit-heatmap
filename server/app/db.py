@@ -80,14 +80,19 @@ def addHeatMap(request):
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
     
-def removeHeatMap(request):
+def removeMetric(request):
     try:
         username = request["username"]
         habitName = request["habitName"]
-        habitData = request["habitData"]
+        habitData = request["data"]
+
+        # Find the index of the habit object in the habits array
+        habit_index = next((i for i, habit in enumerate(heatmaps.find_one({"username": username})["habits"]) if habit['habitName'] == habitName), None)
+        
         heatmaps.find_one_and_update(
             {"username": username},
-            {"$pull": {f"habits.{habitName}.data": habitData}}
+            {"$pull": {f"habits.{habit_index}.data": habitData}},
+            upsert=True
         )
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
