@@ -7,7 +7,9 @@ from app.db import (
     removeHeatMap,
     test_db_connection,
     addUser,
-    authenticate
+    authenticate,
+    getHabits,
+    createHeatmap
 )
 
 from flask_cors import CORS
@@ -43,6 +45,7 @@ def authenticate_user():
     try:
         result = authenticate(userData)
         match(result):
+        
             case 0:
                 return jsonify({"msg": "User authenticated."}), 200
             case 1:
@@ -52,17 +55,28 @@ def authenticate_user():
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
     
-@api_v1.route("/addHeatMap", methods=["POST"])
-def add_map():
+@api_v1.route("/addMetric", methods=["POST"])
+def add_metric():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
     req = request.get_json()
     try:
         # Add the map to the database
         addHeatMap(req)
-        return jsonify({"msg": "Habits updated successfully."}), 200
+        return jsonify({"msg": "Habit updated successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
+    
+@api_v1.route("/createHabit", methods=["POST"])
+def add_habit():
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
+    req = request.get_json()
+    try:
+        createHeatmap(req)
+        return jsonify({"msg": "Habit created successfully."}), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 400    
 
 @api_v1.route("/removeHeatMap", methods=["GET"])
 def remove_map():
@@ -76,14 +90,14 @@ def remove_map():
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
     
-@api_v1.route("/getHabits", methods=["GET"])
+@api_v1.route("/getHabits", methods=["POST"])
 def get_habits():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
     req = request.get_json()
     try:
         # Get the habits from the database
-        getHabits(req)
-        return jsonify({"msg": "Habits retrieved successfully."}), 200
+        habits = getHabits(req.get("username"))
+        return jsonify({"msg": "Habits retrieved successfully.", "result":habits}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400

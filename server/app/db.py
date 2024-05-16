@@ -14,7 +14,14 @@ import re
 
 # Load the configuration from the ..ini file
 config = configparser.ConfigParser()
-config.read(".ini")
+# Get the absolute path to the .ini file
+config_file = os.path.join(os.path.dirname(__file__), ".ini")
+
+# Print the current working directory for debugging
+print(f"Current working directory: {os.getcwd()}")
+print(f"Configuration file path: {config_file}")
+
+config.read(config_file)
 
 client = MongoClient(config["PROD"]["DB_URI"])
 db = client.get_database("prod")
@@ -60,6 +67,7 @@ def addHeatMap(request):
         username = request["username"]
         habitName = request["habitName"]
         habitData = request["habitData"]
+
         heatmaps.find_one_and_update(
             {"username": username},
             {"$push": {f"habits.{habitName}.data": habitData}},
@@ -88,3 +96,26 @@ def getHabits(username):
         return {"habits": result["habits"]}
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
+    
+def createHeatmap(request): 
+    try:
+        username = request["username"]
+        habitName = request["habitName"]
+        habit_metric = request.get("metric")  
+        habit_color = request.get("color") 
+
+        new_habit = {
+            habitName:  {
+                "data": [],
+                "metric": habit_metric,
+                "color": habit_color
+            }
+        } 
+
+        heatmaps.find_one_and_update(
+            {"username": username},
+            {"$push": {f"habits": new_habit}},
+            upsert=True
+        )
+    except Exception as e:
+        raise Exception(f"An error occurred: {e}") 
