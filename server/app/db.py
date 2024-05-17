@@ -181,4 +181,16 @@ def updateMetric(request):
             )
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
-        
+
+def updateUsername(request):
+    try:
+        username = request["username"]
+        newUsername = request["newUsername"]
+
+        heatmaps.find_one_and_update(
+            {"username": username},
+            {"$set": {"username": newUsername}},
+            upsert=True
+        )
+    except Exception as e:
+        raise Exception(f"An error occurred: {e}")

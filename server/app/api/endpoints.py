@@ -12,7 +12,8 @@ from app.db import (
     createHeatmap,
     removeHabit,
     updateHabit,
-    updateMetric
+    updateMetric,
+    updateUsername
 )
 
 from flask_cors import CORS
@@ -138,5 +139,17 @@ def update_metric():
         # Update the metric in the database
         updateMetric(req)
         return jsonify({"msg": "Metric updated successfully."}), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 400
+    
+@api_v1.route("/updateUsername", methods=["POST"])
+def update_username():
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
+    req = request.get_json()
+    try:
+        # Update the username in the database
+        updateUsername(req)
+        return jsonify({"msg": "Username updated successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
