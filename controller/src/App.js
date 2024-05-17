@@ -19,7 +19,7 @@ const App = () => {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 
-  const [username, setUsername] = useState("testuser");
+  const [username, setUsername] = useState("hello there");
 
   return (
     <div className={`transition-colors duration-500 ease-in-out h-screen ${theme === 'light' ? 'bg-gray-100 text-black' : 'bg-zinc-900 text-white'}`}>
@@ -32,7 +32,7 @@ const App = () => {
           <Route path="/about" element={<About username={username} />} />
           <Route path="/settings" element={<Settings username={username} setUsername={setUsername}/>} />
           <Route path="/habits" element={<Habit username={username}/>} />
-          <Route path="/add-habit" element={<AddHabit />} />
+          <Route path="/add-habit" element={<AddHabit username={username}/>} />
         </Routes>
 
       </div>
