@@ -15,7 +15,6 @@ export async function fetchHabits(username) {
     }
 }
  
-  
 export function getHabitOptions(habits) {
 if (!habits || habits.length === 0) {
     return <option value="none">No habits found</option>;
@@ -28,6 +27,8 @@ return habits.map((habit, index) => (
 export function selectedHabitDetails(habitName, habits) {
     if (!habits || habits.length === 0) {
         return {};
+    } else if (habitName === "select") {
+        return {"habitName": "Select a habit", "metric": "Select a habit", "color": "Select a habit"};
     } else {
         return habits.find((habit) => habit.habitName === habitName);
     }
