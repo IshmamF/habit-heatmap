@@ -39,6 +39,12 @@ const Settings = () => {
           )
         } else {
           const formData = new FormData(event.target);
+          if (formData.get('title') === "") {
+            formData.set('title', selectedHabit.habitName);
+          }
+          if (formData.get('metric') === "") { 
+            formData.set('metric', selectedHabit.metric);
+          }
           const title = formData.get('title');
           const metric = formData.get('metric');
           const color = formData.get('color');
@@ -80,13 +86,13 @@ const Settings = () => {
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
             Title
           </label>
-          <input placeholder={selectedHabit.habitName} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " type="text" name="title" required/>
+          <input placeholder={selectedHabit.habitName} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " type="text" name="title" />
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="metric">
             Metric
           </label>
-          <input placeholder={selectedHabit.metric} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " type="text" name="metric" required/>
+          <input placeholder={selectedHabit.metric} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " type="text" name="metric" />
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="color">
