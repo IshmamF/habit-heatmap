@@ -1,4 +1,17 @@
+import React, { useEffect, useState } from 'react';
+import { getHabitOptions , fetchHabits } from '../../functions/habits';
+
 const Settings = () => {
+    const username = "testuser";
+    const [habits, setHabits] = useState([]);
+
+    useEffect(() => {
+      async function loadHabits() {
+        const fetchedHabits = await fetchHabits(username);
+        setHabits(fetchedHabits);
+      }
+      loadHabits();
+    }, []);
 
     return(
       <form className="max-w-md mx-auto bg-white shadow-md rounded px-8 mt-12 pt-6 pb-8 mb-4">
@@ -7,7 +20,7 @@ const Settings = () => {
             Select Habit:
           </label>
           <select className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " name="color">
-            <option value="green">Green</option>
+            {getHabitOptions(habits)}
           </select>
         </div>
         <div className="mb-4">

@@ -12,13 +12,6 @@ const AddHabit = () => {
     const color = formData.get('color');
     const username = "testuser";
 
-    /*
-        username = request["username"]
-        habitName = request["habitName"]
-        habit_metric = request.get("metric")  
-        habit_color = request.get("color") 
-    */
-
     fetch('http://127.0.0.1:8080/api/v1/createHabit', {
       method: 'POST',
       headers: {
