@@ -17,7 +17,7 @@ export default function UpdateMetric({openUpdate, closeUpdateModal, submitUpdate
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="metric">
                             Metric
                         </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" type="number" name="metric" required/>
+                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" type="number" name="metric"/>
                         {'  ' + selectedHabit.metric}
                     </div>
                     <div className="mb-4">

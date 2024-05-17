@@ -73,12 +73,60 @@ export default function Heatmap({selectedHabit}) {
     function submitUpdate(event){
         event.preventDefault();
         const updateData = new FormData(event.target);
-        const metric = updateData.get('metric');
-        console.log('metric submitted for date:', date + ' with value:', metric + ' and metric:', selectedHabit['metric']);
+        const metric = Number(updateData.get('metric'));
+        const note = updateData.get('note');
+        const formattedDate = getCorrectDate(date, "yyyy/mm/dd");
+        console.log("metric", metric, "note", note, "date", formattedDate)
+        let data;
+        for (let info of selectedHabit.data) {
+            if (info.date === formattedDate) {
+                data = info;
+                break;
+            }
+        }
+        if (metric) {
+            data.value = metric;
+        }
+        if (note) {
+            data.note = note;
+        }
+
         if (button === "update") {
-            console.log('update');
+            fetch('http://localhost:8080/api/v1/updateMetric', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({"habitName": selectedHabit.habitName, "date": formattedDate, "value": data.value, "note":data.note, "username": username}),
+            }).then(response => {
+                if (response.ok) {
+                    console.log(response.json());
+                    alert("Metric updated successfully!");
+                } else {
+                    alert("Failed to update metric");
+                }
+            }).catch((error) => {
+                console.error('Error:', error);
+            }
+            )
         } else {
-            console.log('delete');
+            fetch('http://localhost:8080/api/v1/removeMetric', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({"habitName": selectedHabit.habitName, "date": formattedDate, "username": username}),
+            }).then(response => {
+                if (response.ok) {
+                    console.log(response.json());
+                    alert("Metric deleted successfully!");
+                } else {
+                    alert("Failed to delete metric");
+                }
+            }).catch((error) => {
+                console.error('Error:', error);
+            }
+            )
         }
     }
     
