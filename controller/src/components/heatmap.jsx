@@ -9,7 +9,22 @@ import dayjs from 'dayjs';
 import UpdateMetric from './updateMetric.jsx';
 import AddMetric from './addmetric';
 
+
+function getCorrectDate(date, format="mm/dd/yyyy") {
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1; // getUTCMonth() returns month from 0 to 11
+    const day = date.getUTCDate();
+    if (format === "mm/dd/yyyy") {
+        return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`;
+    } else {
+        return `${year}/${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;
+    }
+}
+
 export default function Heatmap({selectedHabit}) {
+
+    const username = "testuser";
+
     const [theme, setTheme] = useState('light'); // State to track the current theme
     const [cal, setCal] = useState(null); // State to hold the CalHeatmap instance
     console.log('selectedHabit:', selectedHabit);
@@ -27,8 +42,32 @@ export default function Heatmap({selectedHabit}) {
     function submitMetric(event) {
         event.preventDefault(); 
         const metricData = new FormData(event.target);
-        const metric = metricData.get('metric');
-        console.log('metric submitted for date:', date + ' with value:', metric + ' and metric:', selectedHabit['metric']);
+        // date, selectedHabit.habitName, metric, note, username
+        const metric = Number(metricData.get('metric'));
+        const note = metricData.get('note');
+        const formattedDate = getCorrectDate(date, "yyyy/mm/dd");
+        const data = {
+            "date": formattedDate,
+            "value": metric,
+            "note": note
+        }
+        fetch('http://localhost:8080/api/v1/addMetric', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({"habitName": selectedHabit.habitName, "data": data, "username": username}),
+        }).then(response => {
+            if (response.ok) {
+                console.log(response.json());
+                alert("Metric added successfully!");
+            } else {
+                alert("Failed to add metric");
+            }
+        }).catch((error) => {
+            console.error('Error:', error);
+        }
+        )
     }
 
     function submitUpdate(event){
@@ -52,8 +91,9 @@ export default function Heatmap({selectedHabit}) {
         }
 
         cal && cal.on("click", (event, timestamp, number) => {
-            setDate(new Date(timestamp).toLocaleDateString());
+            setDate(new Date(timestamp));
             console.log('date:', date);
+            console.log("timestamp", timestamp)
             if (number) {
                 setOpenUpdate(o => !o);
             } else {
@@ -189,8 +229,8 @@ export default function Heatmap({selectedHabit}) {
                         <span style={{ color: theme === 'light' ? '#768390' : '#adbac7', fontSize: 12 }}>More</span>
                     </div>
                     <button onClick={toggleTheme}>Toggle Theme</button> {/* you should try making the heat map change color automatically. do later */}
-                    <AddMetric openAdd={openAdd} closeAddModal={closeAddModal} submitMetric={submitMetric} date={date} selectedHabit={selectedHabit}></AddMetric>
-                    <UpdateMetric openUpdate={openUpdate} closeUpdateModal={closeUpdateModal} submitUpdate={submitUpdate} date={date} selectedHabit={selectedHabit} setButton={setButton}></UpdateMetric>
+                    <AddMetric openAdd={openAdd} closeAddModal={closeAddModal} submitMetric={submitMetric} date={getCorrectDate(date)} selectedHabit={selectedHabit}></AddMetric>
+                    <UpdateMetric openUpdate={openUpdate} closeUpdateModal={closeUpdateModal} submitUpdate={submitUpdate} date={getCorrectDate(date)} selectedHabit={selectedHabit} setButton={setButton}></UpdateMetric>
                 </div>
             )}
         </>

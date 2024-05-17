@@ -21,10 +21,16 @@ export default function AddMetric({openAdd, closeAddModal, submitMetric, date, s
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" type="number" name="metric" required/>
                         {'  ' + selectedHabit.metric}
                     </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="note">
+                            Note
+                        </label>
+                        <textarea className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" name="note" rows={4} cols={40} />
+                    </div>
                     <div className="flex items-center justify-center mt-8">
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded " type="submit">
-                        Submit
-                    </button>
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded " type="submit">
+                            Submit
+                        </button>
                     </div>
                 </form>
             </div>
