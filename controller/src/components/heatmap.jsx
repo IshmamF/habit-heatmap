@@ -11,6 +11,9 @@ export default function Heatmap({selectedHabit}) {
     const [theme, setTheme] = useState('light'); // State to track the current theme
     const [cal, setCal] = useState(null); // State to hold the CalHeatmap instance
     console.log('selectedHabit:', selectedHabit);
+    const colors = {
+        'green': ['#14432a', '#166b34', '#37a446', '#4dd05a'],
+    }
 
     useEffect(() => {
         if (!cal) {
@@ -45,7 +48,7 @@ export default function Heatmap({selectedHabit}) {
                 scale: {
                     color: {
                         type: 'threshold',
-                        range: ['#14432a', '#166b34', '#37a446', '#4dd05a'],
+                        range: colors[selectedHabit.color],
                         domain: [1,3,5,8],
                     },
                 },

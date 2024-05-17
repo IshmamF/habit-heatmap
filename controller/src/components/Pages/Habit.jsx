@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Heatmap from '../heatmap';
-import { getHabitOptions , fetchHabits, selectedHabitDetails } from '../../functions/habits';
+import {fetchHabits, selectedHabitDetails } from '../../functions/habits';
+import HabitOptions from '../habitoptions';
 
 const Habit = () => {
   const username = "testuser";
@@ -21,15 +22,7 @@ const Habit = () => {
 
   return (
     <div>
-        <div className='mb-4'>
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="habit">
-            Select Habit:
-          </label>
-          <select onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " name="habit">
-            <option value="select">Select a Habit</option>
-            {getHabitOptions(habits)}
-          </select>
-        </div>
+      <HabitOptions habits={habits} handleChange={handleChange}></HabitOptions>
       <Heatmap selectedHabit={selectedHabit}></Heatmap>
     </div>
   )
