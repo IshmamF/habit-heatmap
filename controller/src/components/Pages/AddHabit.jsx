@@ -10,8 +10,33 @@ const AddHabit = () => {
     const title = formData.get('title');
     const metric = formData.get('metric');
     const color = formData.get('color');
+    const username = "testuser";
 
-    alert(`Title: ${title}, Metric: ${metric}, Color: ${color}`);
+    /*
+        username = request["username"]
+        habitName = request["habitName"]
+        habit_metric = request.get("metric")  
+        habit_color = request.get("color") 
+    */
+
+    fetch('http://127.0.0.1:8080/api/v1/createHabit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({"username": username, "habitName":title, "metric": metric, "color": color}),
+    }).then(response => {
+      if (response.ok) {
+        console.log(response.json());
+        alert("Habit created successfully!");
+        window.location.href = "/habits";
+      } else {
+        alert("Failed to create habit");
+      }
+    }).catch((error) => {
+      console.error('Error:', error);
+    }
+    )
   }
   
   return (
