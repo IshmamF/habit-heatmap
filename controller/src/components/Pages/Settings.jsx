@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { getHabitOptions , fetchHabits } from '../../functions/habits';
+import { getHabitOptions , fetchHabits, selectedHabitDetails } from '../../functions/habits';
 
 const Settings = () => {
     const username = "testuser";
     const [habits, setHabits] = useState([]);
+    const [habitOption, sethabitOption] = useState("Select a habit");
+    const [selectedHabit, setSelectedHabit] = useState({});
+
+    function handleChange(event) {
+        sethabitOption(event.target.value)
+        setSelectedHabit(selectedHabitDetails(event.target.value, habits));
+    }
 
     useEffect(() => {
       async function loadHabits() {
@@ -19,7 +26,7 @@ const Settings = () => {
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="color">
             Select Habit:
           </label>
-          <select className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " name="color">
+          <select value={habitOption} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " name="color">
             {getHabitOptions(habits)}
           </select>
         </div>
@@ -27,13 +34,13 @@ const Settings = () => {
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
             Title
           </label>
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " type="text" name="title" required/>
+          <input placeholder={selectedHabit.habitName} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " type="text" name="title" required/>
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="metric">
             Metric
           </label>
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " type="text" name="metric" required/>
+          <input placeholder={selectedHabit.metric} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " type="text" name="metric" required/>
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="color">

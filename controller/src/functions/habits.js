@@ -24,3 +24,11 @@ return habits.map((habit, index) => (
     <option key={index} value={habit.habitName}>{habit.habitName}</option>
 ));
 }
+
+export function selectedHabitDetails(habitName, habits) {
+    if (!habits || habits.length === 0) {
+        return {};
+    } else {
+        return habits.find((habit) => habit.habitName === habitName);
+    }
+}                 
