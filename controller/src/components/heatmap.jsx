@@ -6,6 +6,8 @@ import LegendLite from 'cal-heatmap/plugins/LegendLite';
 import 'cal-heatmap/cal-heatmap.css';
 import 'dayjs/locale/en';
 import dayjs from 'dayjs';
+import UpdateMetric from './updateMetric.jsx';
+import AddMetric from './addmetric';
 
 export default function Heatmap({selectedHabit}) {
     const [theme, setTheme] = useState('light'); // State to track the current theme
@@ -14,6 +16,33 @@ export default function Heatmap({selectedHabit}) {
     const colors = {
         'green': ['#14432a', '#166b34', '#37a446', '#4dd05a'],
     }
+    const [date, setDate] = useState(new Date());
+    const [openAdd, setOpenAdd] = useState(false);
+    const closeAddModal = () => setOpenAdd(false);
+    const [openUpdate, setOpenUpdate] = useState(false);
+    const closeUpdateModal = () => setOpenUpdate(false);
+    const [button, setButton] = useState("");
+
+
+    function submitMetric(event) {
+        event.preventDefault(); 
+        const metricData = new FormData(event.target);
+        const metric = metricData.get('metric');
+        console.log('metric submitted for date:', date + ' with value:', metric + ' and metric:', selectedHabit['metric']);
+    }
+
+    function submitUpdate(event){
+        event.preventDefault();
+        const updateData = new FormData(event.target);
+        const metric = updateData.get('metric');
+        console.log('metric submitted for date:', date + ' with value:', metric + ' and metric:', selectedHabit['metric']);
+        if (button === "update") {
+            console.log('update');
+        } else {
+            console.log('delete');
+        }
+    }
+    
 
     useEffect(() => {
         if (!cal) {
@@ -22,16 +51,16 @@ export default function Heatmap({selectedHabit}) {
             setCal(newCal);
         }
 
-        // creates data points throughout the whole year of 2024 (DUMMY DATA)
-        const data = [];
-        for (let month = 0; month < 12; month++) {
-            const daysInMonth = dayjs('2024-01-01').add(month, 'month').daysInMonth();
-            for (let day = 1; day <= daysInMonth; day++) {
-                const value = Math.floor(Math.random() * 8) + 1;
-                const date = dayjs('2024-01-01').add(month, 'month').add(day - 1, 'day').format('YYYY-MM-DD');
-                data.push({ date, value });
+        cal && cal.on("click", (event, timestamp, number) => {
+            setDate(new Date(timestamp).toLocaleDateString());
+            console.log('date:', date);
+            if (number) {
+                setOpenUpdate(o => !o);
+            } else {
+                setOpenAdd(o => !o);
             }
-        }
+    });
+    
 
         // Configure the heat map with the generated data
         cal && cal.paint(
@@ -160,6 +189,8 @@ export default function Heatmap({selectedHabit}) {
                         <span style={{ color: theme === 'light' ? '#768390' : '#adbac7', fontSize: 12 }}>More</span>
                     </div>
                     <button onClick={toggleTheme}>Toggle Theme</button> {/* you should try making the heat map change color automatically. do later */}
+                    <AddMetric openAdd={openAdd} closeAddModal={closeAddModal} submitMetric={submitMetric} date={date} selectedHabit={selectedHabit}></AddMetric>
+                    <UpdateMetric openUpdate={openUpdate} closeUpdateModal={closeUpdateModal} submitUpdate={submitUpdate} date={date} selectedHabit={selectedHabit} setButton={setButton}></UpdateMetric>
                 </div>
             )}
         </>
