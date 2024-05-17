@@ -10,7 +10,9 @@ from app.db import (
     authenticate,
     getHabits,
     createHeatmap,
-    removeHabit
+    removeHabit,
+    updateHabit,
+    updateMetric
 )
 
 from flask_cors import CORS
@@ -85,7 +87,7 @@ def remove_metric():
         return jsonify({"msg": "Not JSON request."}), 400
     req = request.get_json()
     try:
-        # Remove the map from the database
+        # Remove the metric from the database
         removeMetric(req)
         return jsonify({"msg": "Metric removed successfully."}), 200
     except Exception as e:
@@ -97,7 +99,7 @@ def remove_habit():
         return jsonify({"msg": "Not JSON request."}), 400
     req = request.get_json()
     try:
-        # Remove the map from the database
+        # Remove the habit from the database
         removeHabit(req)
         return jsonify({"msg": "habit removed successfully."}), 200
     except Exception as e:
@@ -112,5 +114,29 @@ def get_habits():
         # Get the habits from the database
         habits = getHabits(req.get("username"))
         return jsonify({"msg": "Habits retrieved successfully.", "result":habits}), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 400
+    
+@api_v1.route("/updateHabit", methods=["POST"])
+def update_habit():
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
+    req = request.get_json()
+    try:
+        # Update the habit in the database
+        updateHabit(req)
+        return jsonify({"msg": "Habit updated successfully."}), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 400
+    
+@api_v1.route("/updateMetric", methods=["POST"])
+def update_metric():
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
+    req = request.get_json()
+    try:
+        # Update the metric in the database
+        updateMetric(req)
+        return jsonify({"msg": "Metric updated successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
