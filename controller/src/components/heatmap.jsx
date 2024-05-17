@@ -1,93 +1,159 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import CalHeatmap from 'cal-heatmap';
-import Tooltip from 'cal-heatmap/plugins/Tooltip';
-import Legend from 'cal-heatmap/plugins/Legend';
 import CalendarLabel from 'cal-heatmap/plugins/CalendarLabel';
+import Tooltip from 'cal-heatmap/plugins/Tooltip';
+import LegendLite from 'cal-heatmap/plugins/LegendLite';
+import 'cal-heatmap/cal-heatmap.css';
+import 'dayjs/locale/en';
 import dayjs from 'dayjs';
-import 'dayjs/locale/en'; // Import the locale you need
 
-dayjs.locale('en'); // Use the locale as needed
+export default function Heatmap() {
+    const [theme, setTheme] = useState('light'); // State to track the current theme
+    const [cal, setCal] = useState(null); // State to hold the CalHeatmap instance
 
-const Heatmap = () => {
-    const calRef = useRef(null);
+    useEffect(() => {
+        if (!cal) {
+            // Initialize CalHeatmap only once.
+            const newCal = new CalHeatmap();
+            setCal(newCal);
+        }
 
-    /*useEffect(() => {
-        if (!calRef.current) {
-            console.log("Initializing CalHeatmap");
-            calRef.current = new CalHeatmap();
-            calRef.current.paint({
+        // creates data points throughout the whole year of 2024 (DUMMY DATA)
+        const data = [];
+        for (let month = 0; month < 12; month++) {
+            const daysInMonth = dayjs('2024-01-01').add(month, 'month').daysInMonth();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const value = Math.floor(Math.random() * 8) + 1;
+                const date = dayjs('2024-01-01').add(month, 'month').add(day - 1, 'day').format('YYYY-MM-DD');
+                data.push({ date, value });
+            }
+        }
+
+        // Configure the heat map with the generated data
+        cal && cal.paint(
+            {
                 data: {
-                    source: '../seattle-weather.csv',
-                    type: 'csv',
+                    source: data,
+                    type: 'json',
                     x: 'date',
-                    y: d => +d['wind'],
+                    y: 'value',
                     groupY: 'max',
                 },
                 date: { start: new Date('2024-01-01') },
-                range: 8,
+                range: 12,
                 scale: {
                     color: {
-<<<<<<< Updated upstream
-                        type: 'quantize',
-                        // New gray color scale
-                        range: ['#f0f0f0', '#d9d9d9', '#bdbdbd', '#969696', '#737373', '#525252', '#252525', '#000000'],
-                        domain: [0, 1, 2, 3, 4, 5, 6, 7],
-=======
                         type: 'threshold',
                         range: ['#14432a', '#166b34', '#37a446', '#4dd05a'],
                         domain: [1,3,5,8],
->>>>>>> Stashed changes
                     },
                 },
                 domain: {
                     type: 'month',
+                    gutter: 4,
+                    label: { text: 'MMM', textAlign: 'start', position: 'top' },
                 },
-                subDomain: { type: 'day', radius: 2 },
-                itemSelector: '#ex-wind',
-            }, [
-                [Tooltip, {
-                    text: function (date, value) {
-                        return (value ? value + 'km/h' : 'No data') + ' on ' + dayjs(date).format('LL');
-                    }
-                }],
-                [Legend, {
-                    tickSize: 0,
-                    width: 100,
-                    itemSelector: '#ex-wind-legend',
-                    label: 'Seattle wind (km/h)',
-                }],
-            ]);
+                subDomain: { type: 'ghDay', radius: 2, width: 11, height: 11, gutter: 4 },
+                itemSelector: '#ex-ghDay',
+            },
+            [
+                [
+                    Tooltip,
+                    {
+                        text: function (date, value, dayjsDate) {
+                            return (
+                                (value ? value : 'No') +
+                                ' contributions on ' +
+                                dayjsDate.format('dddd, MMMM D, YYYY')
+                            );
+                        },
+                    },
+                ],
+                [
+                    LegendLite,
+                    {
+                        includeBlank: true,
+                        itemSelector: '#ex-ghDay-legend',
+                        radius: 2,
+                        width: 11,
+                        height: 11,
+                        gutter: 4,
+                    },
+                ],
+                [
+                    CalendarLabel,
+                    {
+                        width: 30,
+                        textAlign: 'start',
+                        text: () => dayjs().format('ddd'), // Format the date to get short weekday
+                        padding: [25, 0, 0, 0],
+                    },
+                ],
+            ]
+        );
+
+        // destroy function to ensure the heatmap doesn't create duplicates.
+        return () => {
+            if (cal) {
+                cal.destroy();
+                setCal(null);
+            }
+        };
+    }, [cal]); // Re-run effect when cal changes or initially when mounted
+
+    // Function to toggle between light and dark themes
+    const toggleTheme = () => {
+        setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+        if (cal) {
+            cal.destroy();
+            setCal(null);
         }
-    }, []);*/
+    };
 
     return (
-        <div style={{ display: 'inline-block' }}>
-            <div id="ex-wind"></div>
+        <div
+            style={{
+                background: theme === 'light' ? '#e4e4e7' : '#22272d',
+                color: theme === 'light' ? '#22272d' : '#adbac7',
+                borderRadius: '3px',
+                padding: '1rem',
+                overflow: 'hidden',
+            }}
+        >
+            <div id="ex-ghDay" className="margin-bottom--md"></div>
             <a
                 className="button button--sm button--secondary margin-top--sm"
                 href="#"
                 onClick={e => {
                     e.preventDefault();
-                    calRef.current.previous();
+                    if (cal) {
+                        cal.previous();
+                    }
                 }}
-            >   
+            >
                 ← Previous
             </a>
             <a
-                className="button button--sm button--secondary margin-left--xs margin-top--sm"
+                className="button button--sm button--secondary margin-top--sm margin-left--xs"
                 href="#"
                 onClick={e => {
                     e.preventDefault();
-                    calRef.current.next();
+                    if (cal) {
+                        cal.next();
+                    }
                 }}
             >
                 Next →
             </a>
-            <div id="ex-wind-legend" style={{ float: 'right' }}></div>
-        </div> 
+            <div style={{ float: 'right', fontSize: 12 }}>
+                <span style={{ color: theme === 'light' ? '#768390' : '#adbac7' }}>Less</span>
+                <div
+                    id="ex-ghDay-legend"
+                    style={{ display: 'inline-block', margin: '0 4px' }}
+                ></div>
+                <span style={{ color: theme === 'light' ? '#768390' : '#adbac7', fontSize: 12 }}>More</span>
+            </div>
+            <button onClick={toggleTheme}>Toggle Theme</button> {/* you should try making the heat map change color automatically. do later */}
+        </div>
     );
-};
-
-export default Heatmap;
-
-//heatmap stuff commented out
+}
