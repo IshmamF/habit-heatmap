@@ -22,6 +22,7 @@ function getCorrectDate(date, format="mm/dd/yyyy") {
 }
 
 export default function Heatmap({selectedHabit}) {
+    const [updatedHabit, setUpdatedHabit] = useState(selectedHabit['data']);
 
     const username = "testuser";
 
@@ -43,12 +44,12 @@ export default function Heatmap({selectedHabit}) {
         event.preventDefault(); 
         const metricData = new FormData(event.target);
         // date, selectedHabit.habitName, metric, note, username
-        const metric = Number(metricData.get('metric'));
+        const value = Number(metricData.get('metric'));
         const note = metricData.get('note');
         const formattedDate = getCorrectDate(date, "yyyy/mm/dd");
         const data = {
             "date": formattedDate,
-            "value": metric,
+            "value": value,
             "note": note
         }
         fetch('http://localhost:8080/api/v1/addMetric', {
@@ -60,9 +61,11 @@ export default function Heatmap({selectedHabit}) {
         }).then(response => {
             if (response.ok) {
                 console.log(response.json());
-                alert("Metric added successfully!");
+                const newHabit = selectedHabit.data.concat(data);
+                cal && cal.fill(newHabit);
+                setUpdatedHabit(newHabit);
             } else {
-                alert("Failed to add metric");
+                alert("Failed to add value");
             }
         }).catch((error) => {
             console.error('Error:', error);
@@ -73,19 +76,19 @@ export default function Heatmap({selectedHabit}) {
     function submitUpdate(event){
         event.preventDefault();
         const updateData = new FormData(event.target);
-        const metric = Number(updateData.get('metric'));
+        const value = Number(updateData.get('metric'));
         const note = updateData.get('note');
         const formattedDate = getCorrectDate(date, "yyyy/mm/dd");
-        console.log("metric", metric, "note", note, "date", formattedDate)
+        console.log("metric", value, "note", note, "date", formattedDate)
         let data;
-        for (let info of selectedHabit.data) {
+        for (let info of updatedHabit) {
             if (info.date === formattedDate) {
                 data = info;
                 break;
             }
         }
-        if (metric) {
-            data.value = metric;
+        if (value) {
+            data.value = value;
         }
         if (note) {
             data.note = note;
@@ -101,7 +104,14 @@ export default function Heatmap({selectedHabit}) {
             }).then(response => {
                 if (response.ok) {
                     console.log(response.json());
-                    alert("Metric updated successfully!");
+                    const newHabit = updatedHabit.map(info => {
+                        if (info.date === formattedDate) {
+                            return data;
+                        }
+                        return info;
+                    });
+                    cal && cal.fill(newHabit);
+                    setUpdatedHabit(newHabit);
                 } else {
                     alert("Failed to update metric");
                 }
@@ -119,7 +129,9 @@ export default function Heatmap({selectedHabit}) {
             }).then(response => {
                 if (response.ok) {
                     console.log(response.json());
-                    alert("Metric deleted successfully!");
+                    const newHabit = updatedHabit.filter(info => info.date !== formattedDate);
+                    cal && cal.fill(newHabit);
+                    setUpdatedHabit(newHabit);
                 } else {
                     alert("Failed to delete metric");
                 }
@@ -141,7 +153,8 @@ export default function Heatmap({selectedHabit}) {
         cal && cal.on("click", (event, timestamp, number) => {
             setDate(new Date(timestamp));
             console.log('date:', date);
-            console.log("timestamp", timestamp)
+            console.log("timestamp", timestamp);
+            console.log("habit", updatedHabit);
             if (number) {
                 setOpenUpdate(o => !o);
             } else {

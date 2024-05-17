@@ -33,7 +33,9 @@ const Settings = () => {
           }).then(response => {
             if (response.ok) {
               console.log(response.json());
-            } 
+            }
+            const updatedHabits = habits.filter(habit => habit.habitName !== selectedHabit.habitName); 
+            setHabits(updatedHabits);
           }).catch((error) => {
             console.error('Error:', error);
           }
@@ -57,6 +59,15 @@ const Settings = () => {
             body: JSON.stringify({"username": username, "habitName": selectedHabit.habitName, "newHabitName": title, "metric": metric, "color": color}),
           }).then(response => {
             if (response.ok) {
+              const updatedHabits = habits.map(habit => {
+                if (habit.habitName === selectedHabit.habitName) {
+                  habit.habitName = title;
+                  habit.metric = metric;
+                  habit.color = color;
+                }
+                return habit;
+              });
+              setHabits(updatedHabits);
               setSelectedHabit({"habitName": title, "metric": metric, "color": color});
               console.log(response.json());
             } 

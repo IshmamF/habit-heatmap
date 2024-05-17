@@ -23,7 +23,7 @@ const Habit = () => {
   return (
     <div>
       <HabitOptions habits={habits} handleChange={handleChange}></HabitOptions>
-      <Heatmap selectedHabit={selectedHabit}></Heatmap>
+      <Heatmap selectedHabit={selectedHabit} setSelectedHabit={setSelectedHabit}></Heatmap>
     </div>
   )
 }
