@@ -7,9 +7,10 @@ import 'cal-heatmap/cal-heatmap.css';
 import 'dayjs/locale/en';
 import dayjs from 'dayjs';
 
-export default function Heatmap() {
+export default function Heatmap({selectedHabit}) {
     const [theme, setTheme] = useState('light'); // State to track the current theme
     const [cal, setCal] = useState(null); // State to hold the CalHeatmap instance
+    console.log('selectedHabit:', selectedHabit);
 
     useEffect(() => {
         if (!cal) {
@@ -33,7 +34,7 @@ export default function Heatmap() {
         cal && cal.paint(
             {
                 data: {
-                    source: data,
+                    source: selectedHabit['data'],
                     type: 'json',
                     x: 'date',
                     y: 'value',
@@ -99,7 +100,7 @@ export default function Heatmap() {
                 setCal(null);
             }
         };
-    }, [cal]); // Re-run effect when cal changes or initially when mounted
+    }, [cal, selectedHabit]); // Re-run effect when cal changes or initially when mounted
 
     // Function to toggle between light and dark themes
     const toggleTheme = () => {
@@ -111,49 +112,53 @@ export default function Heatmap() {
     };
 
     return (
-        <div
-            style={{
-                background: theme === 'light' ? '#e4e4e7' : '#22272d',
-                color: theme === 'light' ? '#22272d' : '#adbac7',
-                borderRadius: '3px',
-                padding: '1rem',
-                overflow: 'hidden',
-            }}
-        >
-            <div id="ex-ghDay" className="margin-bottom--md"></div>
-            <a
-                className="button button--sm button--secondary margin-top--sm"
-                href="#"
-                onClick={e => {
-                    e.preventDefault();
-                    if (cal) {
-                        cal.previous();
-                    }
-                }}
-            >
-                ← Previous
-            </a>
-            <a
-                className="button button--sm button--secondary margin-top--sm margin-left--xs"
-                href="#"
-                onClick={e => {
-                    e.preventDefault();
-                    if (cal) {
-                        cal.next();
-                    }
-                }}
-            >
-                Next →
-            </a>
-            <div style={{ float: 'right', fontSize: 12 }}>
-                <span style={{ color: theme === 'light' ? '#768390' : '#adbac7' }}>Less</span>
+        <>
+            {selectedHabit.habitName !== "Select a habit" && (
                 <div
-                    id="ex-ghDay-legend"
-                    style={{ display: 'inline-block', margin: '0 4px' }}
-                ></div>
-                <span style={{ color: theme === 'light' ? '#768390' : '#adbac7', fontSize: 12 }}>More</span>
-            </div>
-            <button onClick={toggleTheme}>Toggle Theme</button> {/* you should try making the heat map change color automatically. do later */}
-        </div>
+                    style={{
+                        background: theme === 'light' ? '#e4e4e7' : '#22272d',
+                        color: theme === 'light' ? '#22272d' : '#adbac7',
+                        borderRadius: '3px',
+                        padding: '1rem',
+                        overflow: 'hidden',
+                    }}
+                >
+                    <div id="ex-ghDay" className="margin-bottom--md"></div>
+                    <a
+                        className="button button--sm button--secondary margin-top--sm"
+                        href="#"
+                        onClick={e => {
+                            e.preventDefault();
+                            if (cal) {
+                                cal.previous();
+                            }
+                        }}
+                    >
+                        ← Previous
+                    </a>
+                    <a
+                        className="button button--sm button--secondary margin-top--sm margin-left--xs"
+                        href="#"
+                        onClick={e => {
+                            e.preventDefault();
+                            if (cal) {
+                                cal.next();
+                            }
+                        }}
+                    >
+                        Next →
+                    </a>
+                    <div style={{ float: 'right', fontSize: 12 }}>
+                        <span style={{ color: theme === 'light' ? '#768390' : '#adbac7' }}>Less</span>
+                        <div
+                            id="ex-ghDay-legend"
+                            style={{ display: 'inline-block', margin: '0 4px' }}
+                        ></div>
+                        <span style={{ color: theme === 'light' ? '#768390' : '#adbac7', fontSize: 12 }}>More</span>
+                    </div>
+                    <button onClick={toggleTheme}>Toggle Theme</button> {/* you should try making the heat map change color automatically. do later */}
+                </div>
+            )}
+        </>
     );
 }
