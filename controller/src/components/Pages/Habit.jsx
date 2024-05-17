@@ -3,8 +3,7 @@ import Heatmap from '../heatmap';
 import {fetchHabits, selectedHabitDetails } from '../../functions/habits';
 import HabitOptions from '../habitoptions';
 
-const Habit = () => {
-  const username = "testuser";
+const Habit = ({username}) => {
   const [habits, setHabits] = useState([]);
   const [selectedHabit, setSelectedHabit] = useState({"habitName": "Select a habit", "metric": "Select a habit", "color": "Select a habit", 'data': []});
 
@@ -23,7 +22,7 @@ const Habit = () => {
   return (
     <div>
       <HabitOptions habits={habits} handleChange={handleChange}></HabitOptions>
-      <Heatmap selectedHabit={selectedHabit} setSelectedHabit={setSelectedHabit}></Heatmap>
+      <Heatmap selectedHabit={selectedHabit} setSelectedHabit={setSelectedHabit} username={username}></Heatmap>
     </div>
   )
 }

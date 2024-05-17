@@ -19,6 +19,8 @@ const App = () => {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 
+  const [username, setUsername] = useState("testuser");
+
   return (
     <div className={`transition-colors duration-500 ease-in-out h-screen ${theme === 'light' ? 'bg-gray-100 text-black' : 'bg-zinc-900 text-white'}`}>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
@@ -26,10 +28,10 @@ const App = () => {
       <div className={`container mx-auto px-4 ${theme}`}>
         {/* react router routes */}
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/habits" element={<Habit />} />
+          <Route path="/" element={<Home username={username} />} />
+          <Route path="/about" element={<About username={username} />} />
+          <Route path="/settings" element={<Settings username={username} setUsername={setUsername}/>} />
+          <Route path="/habits" element={<Habit username={username}/>} />
           <Route path="/add-habit" element={<AddHabit />} />
         </Routes>
 

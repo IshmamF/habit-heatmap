@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AddHabit = () => {
+const AddHabit = ({username}) => {
 
   function submitData(event) {
     event.preventDefault(); 
@@ -10,7 +10,6 @@ const AddHabit = () => {
     const title = formData.get('title');
     const metric = formData.get('metric');
     const color = formData.get('color');
-    const username = "testuser";
 
     fetch('http://127.0.0.1:8080/api/v1/createHabit', {
       method: 'POST',

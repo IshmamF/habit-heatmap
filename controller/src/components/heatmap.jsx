@@ -21,10 +21,8 @@ function getCorrectDate(date, format="mm/dd/yyyy") {
     }
 }
 
-export default function Heatmap({selectedHabit}) {
+export default function Heatmap({selectedHabit, username}) {
     const [updatedHabit, setUpdatedHabit] = useState(selectedHabit['data']);
-
-    const username = "testuser";
 
     const [theme, setTheme] = useState('light'); // State to track the current theme
     const [cal, setCal] = useState(null); // State to hold the CalHeatmap instance
@@ -43,7 +41,6 @@ export default function Heatmap({selectedHabit}) {
     function submitMetric(event) {
         event.preventDefault(); 
         const metricData = new FormData(event.target);
-        // date, selectedHabit.habitName, metric, note, username
         const value = Number(metricData.get('metric'));
         const note = metricData.get('note');
         const formattedDate = getCorrectDate(date, "yyyy/mm/dd");
