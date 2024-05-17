@@ -52,7 +52,9 @@ const AddHabit = ({username}) => {
             Pick a color:
           </label>
           <select className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" name="color">
-            <option value="green">Green</option>
+              <option value="green">Green</option>
+              <option value="orange">Orange</option>
+              <option value="blue">Blue</option>
           </select>
         </div>
         <div className="flex items-center justify-center mt-8">

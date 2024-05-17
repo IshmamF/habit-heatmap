@@ -29,6 +29,8 @@ export default function Heatmap({selectedHabit, username}) {
     console.log('selectedHabit:', selectedHabit);
     const colors = {
         'green': ['#14432a', '#166b34', '#37a446', '#4dd05a'],
+        'orange': ['#7f2f00', '#b34700', '#ff6600', '#ff9933'],
+        'blue': ['#0b1a33', '#154273', '#1f5ab9', '#649eff']
     }
     const [date, setDate] = useState(new Date());
     const [openAdd, setOpenAdd] = useState(false);
@@ -164,7 +166,7 @@ export default function Heatmap({selectedHabit, username}) {
         cal && cal.paint(
             {
                 data: {
-                    source: selectedHabit['data'],
+                    source: selectedHabit.data,
                     type: 'json',
                     x: 'date',
                     y: 'value',
