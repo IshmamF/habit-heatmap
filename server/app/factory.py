@@ -1,28 +1,10 @@
-import configparser
-import os
-
 from flask import Flask, jsonify, render_template
 from json import JSONEncoder
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
-
 from bson import json_util, ObjectId
-from datetime import datetime, timedelta
+from datetime import datetime
 from app.api.endpoints import api_v1
-
-
-bcrypt = Bcrypt()
-# Load the configuration from the ..ini file
-config = configparser.ConfigParser()
-# Get the absolute path to the .ini file
-config_file = os.path.join(os.path.dirname(__file__), ".ini")
-
-# Print the current working directory for debugging
-print(f"Current working directory: {os.getcwd()}")
-print(f"Configuration file path: {config_file}")
-
-config.read(config_file)
-secret = config["JWT"]["SECRET"]
 
 class MongoJsonEncoder(JSONEncoder):
     def default(self, obj):
@@ -40,7 +22,6 @@ def create_app():
     # TEMPLATE_FOLDER = os.path.join(APP_DIR, 'build')
     app = Flask(__name__)
     CORS(app)
-    bcrypt.init_app(app)
     app.json_encoder = MongoJsonEncoder
     app.register_blueprint(api_v1)
     
