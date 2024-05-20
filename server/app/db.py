@@ -1,38 +1,36 @@
-from datetime import datetime
-from typing import Union
-import bson
 import os
 import configparser
-import bson.json_util
-import pymongo
 from pymongo import MongoClient
-from pymongo.errors import DuplicateKeyError, OperationFailure
-from bson.objectid import ObjectId
-from bson.errors import InvalidId
-from flask import make_response, request, flash, jsonify
-import re
+from pymongo.errors import DuplicateKeyError
 
-# Load the configuration from the ..ini file
-config = configparser.ConfigParser()
-# Get the absolute path to the .ini file
-config_file = os.path.join(os.path.dirname(__file__), ".ini")
+def heatmap_db():
+    config = configparser.ConfigParser()
+    config_file = os.path.join(os.path.dirname(__file__), "config.ini")
+    config.read(config_file)
+    client = MongoClient(config["PROD"]["DB_URI"])
+    db = client.get_database("prod")
+    return db.get_collection("heatmaps")
 
-# Print the current working directory for debugging
-print(f"Current working directory: {os.getcwd()}")
-print(f"Configuration file path: {config_file}")
+def users_db():
+    config = configparser.ConfigParser()
+    config_file = os.path.join(os.path.dirname(__file__), "config.ini")
+    config.read(config_file)
+    client = MongoClient(config["PROD"]["DB_URI"])
+    db = client.get_database("prod")
+    users = db.get_collection("users")
+    users.create_index("username", unique=True)
+    return users
 
-config.read(config_file)
-
-client = MongoClient(config["PROD"]["DB_URI"])
-db = client.get_database("prod")
-users = db.get_collection("users")
-users.create_index("username", unique=True)
-ping = db.get_collection("ping")
-heatmaps = db.get_collection("heatmaps")
-
+def ping_db():
+    config = configparser.ConfigParser()
+    config_file = os.path.join(os.path.dirname(__file__), "config.ini")
+    config.read(config_file)
+    client = MongoClient(config["PROD"]["DB_URI"])
+    db = client.get_database("prod")
+    return db.get_collection("ping")
 
 # Test the database connection:
-def test_db_connection():
+def test_db_connection(ping):
     try:
         ping.insert_one({"ping": "1"})
         ping.delete_one({"ping": "1"})
@@ -40,13 +38,13 @@ def test_db_connection():
     except Exception as e:
         return f"Error connecting to the database: {e}"
 
-def addUser(user):
+def addUser(user, users):
     try:
         return users.insert_one(user).inserted_id
     except DuplicateKeyError:
         return {"error": "User already exists."}
     
-def authenticate(user):
+def authenticate(user, users):
     username = user["username"]
     password = user["password"]
     try:
@@ -62,7 +60,7 @@ def authenticate(user):
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
 
-def addHeatMap(request):
+def addHeatMap(request, heatmaps):
     try:
         username = request["username"]
         habitName = request["habitName"]
@@ -80,7 +78,7 @@ def addHeatMap(request):
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
     
-def removeMetric(request):
+def removeMetric(request, heatmaps):
     try:
         username = request["username"]
         habitName = request["habitName"]
@@ -97,7 +95,7 @@ def removeMetric(request):
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
     
-def getHabits(username):
+def getHabits(username, heatmaps):
     try:
         result = heatmaps.find_one({"username": username})
         if result is None:
@@ -106,7 +104,7 @@ def getHabits(username):
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
 
-def removeHabit(request):
+def removeHabit(request, heatmaps):
     try:
         username = request["username"]
         habitName = request["habitName"]
@@ -119,7 +117,7 @@ def removeHabit(request):
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
     
-def createHeatmap(request): 
+def createHeatmap(request, heatmaps): 
     try:
         username = request["username"]
         habitName = request["habitName"]
@@ -141,7 +139,7 @@ def createHeatmap(request):
     except Exception as e:
         raise Exception(f"An error occurred: {e}") 
     
-def updateHabit(request):
+def updateHabit(request, heatmaps):
     try:
         username = request["username"]
         habitName = request["habitName"]
@@ -161,7 +159,7 @@ def updateHabit(request):
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
     
-def updateMetric(request):
+def updateMetric(request, heatmaps):
     try:
         username = request["username"]
         habitName = request["habitName"]
@@ -182,7 +180,7 @@ def updateMetric(request):
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
 
-def updateUsername(request):
+def updateUsername(request, heatmaps):
     try:
         username = request["username"]
         newUsername = request["newUsername"]

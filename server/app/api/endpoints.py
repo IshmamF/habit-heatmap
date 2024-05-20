@@ -13,7 +13,10 @@ from app.db import (
     removeHabit,
     updateHabit,
     updateMetric,
-    updateUsername
+    updateUsername,
+    heatmap_db,
+    users_db,
+    ping_db
 )
 
 from flask_cors import CORS
@@ -26,7 +29,8 @@ CORS(api_v1)
 
 @api_v1.route("/ping", methods=["GET"])
 def test_db():
-    return jsonify(test_db_connection())
+    ping = ping_db()
+    return jsonify(test_db_connection(ping))
 
 @api_v1.route("/addUser", methods=["POST"])
 def add_user():
@@ -34,7 +38,8 @@ def add_user():
         return jsonify({"msg": "Not JSON request."}), 400
     userData = request.get_json()
     try:
-        result = addUser(userData)
+        usersDB = users_db()
+        result = addUser(userData, usersDB)
         if isinstance(result, dict) and "error" in result:
             return jsonify({"error": "User already exists."}), 400
         return jsonify({"msg": "User added successfully."}), 200
@@ -47,7 +52,8 @@ def authenticate_user():
         return jsonify({"msg": "Not JSON request."}), 400
     userData = request.get_json()
     try:
-        result = authenticate(userData)
+        usersDB = users_db()
+        result = authenticate(userData, usersDB)
         match(result):
         
             case 0:
@@ -66,7 +72,8 @@ def add_metric():
     req = request.get_json()
     try:
         # Add the map to the database
-        addHeatMap(req)
+        heatmapDB = heatmap_db()
+        addHeatMap(req, heatmapDB)
         return jsonify({"msg": "Data added to Habit successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
@@ -77,7 +84,8 @@ def add_habit():
         return jsonify({"msg": "Not JSON request."}), 400
     req = request.get_json()
     try:
-        createHeatmap(req)
+        db = heatmap_db()
+        createHeatmap(req, db)
         return jsonify({"msg": "Habit created successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400    
@@ -89,7 +97,8 @@ def remove_metric():
     req = request.get_json()
     try:
         # Remove the metric from the database
-        removeMetric(req)
+        heatmapDB = heatmap_db()
+        removeMetric(req, heatmapDB)
         return jsonify({"msg": "Metric removed successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
@@ -101,7 +110,8 @@ def remove_habit():
     req = request.get_json()
     try:
         # Remove the habit from the database
-        removeHabit(req)
+        heatmapDB = heatmap_db()
+        removeHabit(req, heatmapDB)
         return jsonify({"msg": "habit removed successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
@@ -113,7 +123,8 @@ def get_habits():
     req = request.get_json()
     try:
         # Get the habits from the database
-        habits = getHabits(req.get("username"))
+        heatmapDB = heatmap_db()
+        habits = getHabits(req.get("username"), heatmapDB)
         return jsonify({"msg": "Habits retrieved successfully.", "result":habits}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
@@ -125,7 +136,8 @@ def update_habit():
     req = request.get_json()
     try:
         # Update the habit in the database
-        updateHabit(req)
+        heatmapDB = heatmap_db()
+        updateHabit(req, heatmapDB)
         return jsonify({"msg": "Habit updated successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
@@ -137,7 +149,8 @@ def update_metric():
     req = request.get_json()
     try:
         # Update the metric in the database
-        updateMetric(req)
+        heatmapDB = heatmap_db()
+        updateMetric(req, heatmapDB)
         return jsonify({"msg": "Metric updated successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
@@ -149,7 +162,8 @@ def update_username():
     req = request.get_json()
     try:
         # Update the username in the database
-        updateUsername(req)
+        heatmapDB = heatmap_db()
+        updateUsername(req, heatmapDB)
         return jsonify({"msg": "Username updated successfully."}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
