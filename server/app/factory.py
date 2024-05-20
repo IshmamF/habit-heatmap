@@ -3,14 +3,14 @@ import os
 from flask import Flask, jsonify, render_template
 from json import JSONEncoder
 from flask_cors import CORS
-# from flask_bcrypt import Bcrypt
-# from flask_jwt_extended import JWTManager
+from flask_bcrypt import Bcrypt
 
 from bson import json_util, ObjectId
 from datetime import datetime, timedelta
 from app.api.endpoints import api_v1
 
 
+bcrypt = Bcrypt()
 class MongoJsonEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
@@ -28,6 +28,7 @@ def create_app():
 
     app = Flask(__name__)
     CORS(app)
+    bcrypt.init_app(app)
     app.json_encoder = MongoJsonEncoder
     app.register_blueprint(api_v1)
     
