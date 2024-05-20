@@ -3,13 +3,15 @@ from flask import Blueprint, request, jsonify
 from bson import ObjectId
 import jwt
 from datetime import datetime, timedelta
-from app.factory import bcrypt
+from app.factory import bcrypt, secret
 import json
 from app.db import (
     addHeatMap,
+    find_user_by_email,
+    find_users,
+    register,
     removeMetric,
     test_db_connection,
-    addUser,
     authenticate,
     getHabits,
     createHeatmap,
@@ -31,36 +33,67 @@ CORS(api_v1)
 def test_db():
     return jsonify(test_db_connection())
 
-@api_v1.route("/addUser", methods=["POST"])
-def add_user():
-    if not request.is_json:
-        return jsonify({"msg": "Not JSON request."}), 400
-    userData = request.get_json()
+@api_v1.route("/register", methods=["POST"])
+def save_user():
+    message = ""
+    code = 500
+    status = "fail"
     try:
-        result = addUser(userData)
-        if isinstance(result, dict) and "error" in result:
-            return jsonify({"error": "User already exists."}), 400
-        return jsonify({"msg": "User added successfully."}), 200
+        data = request.get_json()
+        check = find_users(data)
+        if check.count() >=1 :
+            message = "User with that email already exists."
+            code = 400
+        else:
+            data["password"] = bcrypt.generate_password_hash(data["password"]).decode("utf-8")
+            data["created_at"] = datetime.now()
+            res = register(data)
+            if res.acknowledged:
+                message = "User registered successfully."
+                code = 201
+                status = "success"
     except Exception as e:
-        return jsonify({"msg": str(e)}), 400
-    
-@api_v1.route("/authenticate", methods=["POST"])
-def authenticate_user():
-    if not request.is_json:
-        return jsonify({"msg": "Not JSON request."}), 400
-    userData = request.get_json()
+        message = str(e)
+        status = "fail"
+    return jsonify({"status": status, "message": message}), code
+
+
+@api_v1.route("/login", methods=["POST"])
+def login():
+    message = ""
+    code = 500
+    status = "fail"
+    res_data = {}
+    print(secret)
     try:
-        result = authenticate(userData)
-        match(result):
-        
-            case 0:
-                return jsonify({"msg": "User authenticated."}), 200
-            case 1:
-                return jsonify({"error": "Incorrect password."}), 400
-            case 2:
-                return jsonify({"error": "User not found."}), 400
+        data = request.get_json()
+        user = find_user_by_email(data["email"])
+        if user:
+            user["_id"] = str(user["_id"])
+            if user and bcrypt.check_password_hash(user["password"], data["password"]):
+                token = jwt.encode({
+                        "user": {
+                            "email": f"{user['email']}",
+                            "id": f"{user['_id']}",
+                        },
+                        "exp": datetime.now() + timedelta(hours=24)
+                    }, secret)
+                del user["password"]
+                message = "User logged in successfully."
+                code = 200
+                status = "success"
+                res_data["token"] = token.decode("utf-8")
+                res_data["user"] = user
+            else:
+                message = "Invalid credentials."
+                code = 401
+        else:
+            message = "User not found."
+            code = 404
     except Exception as e:
-        return jsonify({"msg": str(e)}), 400
+        message = str(e)
+        status = "fail"
+    return jsonify({"status": status, "message": message, "data": res_data}), code
     
 @api_v1.route("/addMetric", methods=["POST"])
 def add_metric():
