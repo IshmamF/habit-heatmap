@@ -1,11 +1,9 @@
-import bson
 import os
 import configparser
+import bcrypt
 import bson.json_util
-import jwt
 from flask import current_app
 from datetime import datetime, timedelta
-from app.factory import bcrypt
 from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
 from bson.objectid import ObjectId
@@ -13,13 +11,7 @@ from bson.objectid import ObjectId
 # Load the configuration from the ..ini file
 config = configparser.ConfigParser()
 # Get the absolute path to the .ini file
-config_file = os.path.join(os.path.dirname(__file__), ".ini")
-
-bcrypt(current_app)
-
-# Print the current working directory for debugging
-print(f"Current working directory: {os.getcwd()}")
-print(f"Configuration file path: {config_file}")
+config_file = "./server/.ini"
 
 config.read(config_file)
 
@@ -41,7 +33,8 @@ def test_db_connection():
         return f"Error connecting to the database: {e}"
 
 def find_users(data):
-    return users.find({"email": data["email"]})
+    return users.count_documents({"email": data["email"]})
+
 
 def find_user_by_email(email):
     return users.find_one({"email": email})
