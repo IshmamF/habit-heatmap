@@ -1,21 +1,21 @@
-from datetime import datetime
-from typing import Union
 import bson
 import os
 import configparser
 import bson.json_util
-import pymongo
+import jwt
+from flask import current_app
+from datetime import datetime, timedelta
+from app.factory import bcrypt
 from pymongo import MongoClient
-from pymongo.errors import DuplicateKeyError, OperationFailure
+from pymongo.errors import DuplicateKeyError
 from bson.objectid import ObjectId
-from bson.errors import InvalidId
-from flask import make_response, request, flash, jsonify
-import re
 
 # Load the configuration from the ..ini file
 config = configparser.ConfigParser()
 # Get the absolute path to the .ini file
 config_file = os.path.join(os.path.dirname(__file__), ".ini")
+
+bcrypt(current_app)
 
 # Print the current working directory for debugging
 print(f"Current working directory: {os.getcwd()}")
@@ -40,11 +40,14 @@ def test_db_connection():
     except Exception as e:
         return f"Error connecting to the database: {e}"
 
-def addUser(user):
-    try:
-        return users.insert_one(user).inserted_id
-    except DuplicateKeyError:
-        return {"error": "User already exists."}
+def find_users(data):
+    return users.find({"email": data["email"]})
+
+def find_user_by_email(email):
+    return users.find_one({"email": email})
+
+def register(user):
+    return users.insert_one(user)
     
 def authenticate(user):
     username = user["username"]
