@@ -81,8 +81,10 @@ def login():
             ):
                 token = jwt.encode(
                     {
+                        
                         "user": {
                             "email": user["email"],
+                            "username": user["username"],
                             "id": user["_id"],
                         },
                         "exp": datetime.now() + timedelta(hours=24),
@@ -111,64 +113,114 @@ def login():
 @api_v1.route("/removeHabit", methods=["POST"])
 @token_required
 def remove_habit():
-    if not request.is_json:
-        return jsonify({"msg": "Not JSON request."}), 400
+    message = ""
+    status = "fail"
+    code = 500
     req = request.get_json()
     try:
         # Remove the habit from the database
-        removeHabit(req)
-        return jsonify({"msg": "habit removed successfully."}), 200
+        if not removeHabit(req):
+            message = "Habit not found."
+            code = 404
+        else:
+            message = "Habit removed successfully."
+            status = "success"
+            code = 200
+        return jsonify({"status": status,"message": message}), code
     except Exception as e:
-        return jsonify({"msg": str(e)}), 400
+        return jsonify({"status": status, "message": str(e)}), code
 
 
 @api_v1.route("/getHabits", methods=["POST"])
+@token_required
 def get_habits():
-    if not request.is_json:
-        return jsonify({"msg": "Not JSON request."}), 400
+    message = ""
+    status = "fail"
+    code = 500
     req = request.get_json()
+    username = req.get("username")
+    if not username:
+        message = "Username is required."
+        code = 400  
     try:
         # Get the habits from the database
-        habits = getHabits(req.get("username"))
-        return jsonify({"msg": "Habits retrieved successfully.", "result": habits}), 200
+        habits = getHabits(username)
+        if habits in None:
+            message = "User not found."
+            code = 404
+        elif isinstance(habits, str):
+            message = habits
+            code = 400  
+        else:
+            message = "Habits retrieved successfully."
+            status = "success"
+            code = 200
+        return jsonify({"status": status, "message": message, "data": habits}), code
     except Exception as e:
-        return jsonify({"msg": str(e)}), 400
+        return jsonify({"status": status, "message": message}), code
 
 
 @api_v1.route("/updateHabit", methods=["POST"])
+@token_required
 def update_habit():
-    if not request.is_json:
-        return jsonify({"msg": "Not JSON request."}), 400
+    message = ""
+    status = "fail"
+    code = 500
     req = request.get_json()
     try:
         # Update the habit in the database
-        updateHabit(req)
-        return jsonify({"msg": "Habit updated successfully."}), 200
+        res = updateHabit(req)
+        if not res:
+            message = "Habit not found."
+            code = 404
+        else:
+            message = "Habit updated successfully."
+            status = "success"
+            code = 200
+        return jsonify({"status": status, "message": message}), code
     except Exception as e:
-        return jsonify({"msg": str(e)}), 400
+        return jsonify({"status": status, "message": str(e)}), code
 
 
 @api_v1.route("/updateMetric", methods=["POST"])
+@token_required
 def update_metric():
-    if not request.is_json:
-        return jsonify({"msg": "Not JSON request."}), 400
+    message = ""
+    code = 500
+    status = "fail"
     req = request.get_json()
     try:
         # Update the metric in the database
-        updateMetric(req)
-        return jsonify({"msg": "Metric updated successfully."}), 200
+        res = updateMetric(req)
+        if not res:
+            message = "Metric or Habit not found."
+            code = 404
+        else:
+            message = "Metric updated successfully."
+            status = "success"
+            code = 200
+        return jsonify({"status": status, "message": message}), code
     except Exception as e:
-        return jsonify({"msg": str(e)}), 400
+        return jsonify({"status": status, "message": str(e)}), code
 
 
 @api_v1.route("/updateUsername", methods=["POST"])
+@token_required
 def update_username():
-    if not request.is_json:
-        return jsonify({"msg": "Not JSON request."}), 400
+    message = ""
+    status = "fail"
+    code = 500
     req = request.get_json()
     try:
         # Update the username in the database
-        updateUsername(req)
-        return jsonify({"msg": "Username updated successfully."}), 200
+        res = updateUsername(req)
+        if not res:
+            message = "Username not found."
+            code = 404
+        else:
+            message = "Username updated successfully."
+            status = "success"
+            code = 200
+        return jsonify({"status": status, "message": message}), code
     except Exception as e:
-        return jsonify({"msg": str(e)}), 400
+        return jsonify({"status": status, "message": str(e)}), code

@@ -62,11 +62,10 @@ def addHeatMap(request):
         raise Exception(f"An error occurred: {e}")
     
 def removeMetric(request):
+    username = request["username"]
+    habitName = request["habitName"]
+    habitData = request["data"]
     try:
-        username = request["username"]
-        habitName = request["habitName"]
-        habitData = request["data"]
-
         # Find the index of the habit object in the habits array
         habit_index = next((i for i, habit in enumerate(heatmaps.find_one({"username": username})["habits"]) if habit['habitName'] == habitName), None)
         
@@ -75,17 +74,19 @@ def removeMetric(request):
             {"$pull": {f"habits.{habit_index}.data": habitData}},
             upsert=True
         )
+        return True
     except Exception as e:
-        raise Exception(f"An error occurred: {e}")
+        return False
     
 def getHabits(username):
     try:
-        result = heatmaps.find_one({"username": username})
-        if result is None:
-            return {"error": "User not found."}
-        return {"habits": result["habits"]}
+        habit = heatmaps.find_one({"username": username})
+        if habit is None:
+            return None
+        return habit
     except Exception as e:
-        raise Exception(f"An error occurred: {e}")
+        return str(e)  # Return the exception message
+
 
 def removeHabit(request):
     try:
@@ -123,13 +124,12 @@ def createHeatmap(request):
         raise Exception(f"An error occurred: {e}") 
     
 def updateHabit(request):
+    username = request["username"]
+    habitName = request["habitName"]
+    newHabitName = request.get("newHabitName")
+    habit_metric = request.get("metric")  
+    habit_color = request.get("color") 
     try:
-        username = request["username"]
-        habitName = request["habitName"]
-        newHabitName = request.get("newHabitName")
-        habit_metric = request.get("metric")  
-        habit_color = request.get("color") 
-
         # Find the index of the habit object in the habits array
         habit_index = next((i for i, habit in enumerate(heatmaps.find_one({"username": username})["habits"]) if habit['habitName'] == habitName), None)
 
@@ -139,17 +139,17 @@ def updateHabit(request):
                 {"$set": {f"habits.{habit_index}.metric": habit_metric, f"habits.{habit_index}.color": habit_color, f"habits.{habit_index}.habitName": newHabitName}},
                 upsert=True
             )
+        return True
     except Exception as e:
-        raise Exception(f"An error occurred: {e}")
+        return False
     
 def updateMetric(request):
+    username = request["username"]
+    habitName = request["habitName"]
+    habitData = request["data"]
+    newMetric = request.get("newValue")
+    newNote = request.get("newNote")
     try:
-        username = request["username"]
-        habitName = request["habitName"]
-        habitData = request["data"]
-        newMetric = request.get("newValue")
-        newNote = request.get("newNote")
-
         # Find the index of the habit object in the habits array
         habit_index = next((i for i, habit in enumerate(heatmaps.find_one({"username": username})["habits"]) if habit['habitName'] == habitName), None)
         metric_index = next((i for i, metric in enumerate(heatmaps.find_one({"username": username})["habits"][habit_index]["data"]) if metric['date'] == habitData['date']), None)
@@ -160,18 +160,19 @@ def updateMetric(request):
                 {"$set": {f"habits.{habit_index}.data.{metric_index}.value": newMetric, f"habits.{habit_index}.data.{metric_index}.note": newNote}},
                 upsert=True,
             )
+        return True
     except Exception as e:
-        raise Exception(f"An error occurred: {e}")
+        return False
 
 def updateUsername(request):
+    username = request["username"]
+    newUsername = request["newUsername"]
     try:
-        username = request["username"]
-        newUsername = request["newUsername"]
-
         heatmaps.find_one_and_update(
             {"username": username},
             {"$set": {"username": newUsername}},
             upsert=True
         )
+        return True
     except Exception as e:
-        raise Exception(f"An error occurred: {e}")
+        return False
