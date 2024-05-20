@@ -41,22 +41,7 @@ def find_user_by_email(email):
 
 def register(user):
     return users.insert_one(user)
-    
-def authenticate(user):
-    username = user["username"]
-    password = user["password"]
-    try:
-        result = users.find_one({"username": username})
-        if result:
-            # check if the passwords and username matches up
-            if result["username"] == username and result["password"] == password:
-                return 0
-            else:
-                return 1
-        else:
-            return 2
-    except Exception as e:
-        raise Exception(f"An error occurred: {e}")
+
 
 def addHeatMap(request):
     try:

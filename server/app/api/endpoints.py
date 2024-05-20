@@ -2,7 +2,7 @@ from flask import Blueprint, config, jsonify, request
 import bcrypt
 import jwt
 from datetime import datetime, timedelta
-from flask_bcrypt import Bcrypt
+from .helpers import tokenReq
 from flask_cors import CORS
 from datetime import datetime
 from app.db import (
@@ -13,7 +13,6 @@ from app.db import (
     register,
     removeMetric,
     test_db_connection,
-    authenticate,
     getHabits,
     createHeatmap,
     removeHabit,
@@ -33,6 +32,7 @@ CORS(api_v1)
 
 
 @api_v1.route("/ping", methods=["GET"])
+@tokenReq
 def test_db():
     return jsonify(test_db_connection())
 
@@ -109,6 +109,7 @@ def login():
 
 
 @api_v1.route("/removeHabit", methods=["POST"])
+@tokenReq
 def remove_habit():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
