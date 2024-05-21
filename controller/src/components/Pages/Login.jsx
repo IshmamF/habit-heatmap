@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const LoginPage = ({ theme }) => {
+  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const LoginPage = ({ theme }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, username, password }),
       });
 
       if (!response.ok) {
@@ -38,6 +39,15 @@ const LoginPage = ({ theme }) => {
       <div className={`p-8 rounded shadow-md w-full max-w-md transition-colors duration-500 ease-in-out ${theme === 'light' ? 'bg-white text-black' : 'bg-gray-800 text-white'}`}>
         <h2 className="text-2xl font-bold mb-4">Login</h2>
         <form onSubmit={handleLogin}>
+          <div className="mb-4">
+            <label className="block mb-2">Email:</label>
+            <input
+              type="email"
+              className={`border rounded-md px-4 py-2 w-full transition-colors duration-500 ease-in-out ${theme === 'light' ? 'bg-gray-200 text-black border-gray-300' : 'bg-gray-700 text-white border-gray-600'}`}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
           <div className="mb-4">
             <label className="block mb-2">Username:</label>
             <input
