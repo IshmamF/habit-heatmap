@@ -55,6 +55,7 @@ export default function Heatmap({selectedHabit, username}) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem("token")
             },
             body: JSON.stringify({"habitName": selectedHabit.habitName, "data": data, "username": username}),
         }).then(response => {
@@ -98,6 +99,7 @@ export default function Heatmap({selectedHabit, username}) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": "Bearer " + localStorage.getItem("token")
                 },
                 body: JSON.stringify({"habitName": selectedHabit.habitName, "date": formattedDate, "value": data.value, "note":data.note, "username": username}),
             }).then(response => {
@@ -123,6 +125,7 @@ export default function Heatmap({selectedHabit, username}) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": "Bearer " + localStorage.getItem("token")
                 },
                 body: JSON.stringify({"habitName": selectedHabit.habitName, "date": formattedDate, "username": username}),
             }).then(response => {

@@ -10,7 +10,7 @@ const SignupPage = ({ theme }) => {
     event.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3001/signup', { // Update the URL to your backend
+      const response = await fetch('http://127.0.0.1:8080/api/v1/login', { // Update the URL to your backend
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
