@@ -34,7 +34,8 @@ CORS(api_v1)
 @api_v1.route("/ping", methods=["GET"])
 @token_required
 def test_db():
-    return jsonify(test_db_connection())
+    ping = ping_db()
+    return jsonify(test_db_connection(ping))
 
 
 @api_v1.route("/register", methods=["POST"])

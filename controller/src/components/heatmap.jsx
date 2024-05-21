@@ -51,7 +51,7 @@ export default function Heatmap({selectedHabit, username}) {
             "value": value,
             "note": note
         }
-        fetch('http://localhost:8080/api/v1/addMetric', {
+        fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/addMetric', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export default function Heatmap({selectedHabit, username}) {
         }
 
         if (button === "update") {
-            fetch('http://localhost:8080/api/v1/updateMetric', {
+            fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/updateMetric', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ export default function Heatmap({selectedHabit, username}) {
             }
             )
         } else {
-            fetch('http://localhost:8080/api/v1/removeMetric', {
+            fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/removeMetric', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

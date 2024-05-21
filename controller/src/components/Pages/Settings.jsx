@@ -23,7 +23,7 @@ const Settings = ({username, setUsername}) => {
       event.preventDefault();
       if (selectedHabit.habitName !== "Select a habit") {
         if (button === "delete") {
-          fetch('http://localhost:8080/api/v1/removeHabit', {
+          fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/removeHabit', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ const Settings = ({username, setUsername}) => {
           const title = formData.get('title');
           const metric = formData.get('metric');
           const color = formData.get('color');
-          fetch('http://localhost:8080/api/v1/updateHabit', {
+          fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/updateHabit', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const Settings = ({username, setUsername}) => {
       const formData = new FormData(e.target);
       const newUsername = formData.get('username');
       console.log(newUsername)
-      fetch('http://localhost:8080/api/v1/updateUsername', {
+      fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/updateUsername', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

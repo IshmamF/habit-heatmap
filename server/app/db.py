@@ -24,7 +24,7 @@ heatmaps = db.get_collection("heatmaps")
 
 
 # Test the database connection:
-def test_db_connection():
+def test_db_connection(ping):
     try:
         ping.insert_one({"ping": "1"})
         ping.delete_one({"ping": "1"})
@@ -43,7 +43,7 @@ def register(user):
     return users.insert_one(user)
 
 
-def addHeatMap(request):
+def addHeatMap(request, heatmaps):
     try:
         username = request["username"]
         habitName = request["habitName"]
@@ -78,7 +78,7 @@ def removeMetric(request):
     except Exception as e:
         return False
     
-def getHabits(username):
+def getHabits(username, heatmaps):
     try:
         habit = heatmaps.find_one({"username": username})
         if habit is None:
@@ -88,7 +88,7 @@ def getHabits(username):
         return str(e)  # Return the exception message
 
 
-def removeHabit(request):
+def removeHabit(request, heatmaps):
     try:
         username = request["username"]
         habitName = request["habitName"]
@@ -101,7 +101,7 @@ def removeHabit(request):
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
     
-def createHeatmap(request): 
+def createHeatmap(request, heatmaps): 
     try:
         username = request["username"]
         habitName = request["habitName"]
