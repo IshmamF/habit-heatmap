@@ -29,7 +29,7 @@ const App = () => {
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <div className={`container mx-auto px-4 ${theme}`}>
         <Routes>
-          <Route path="/" element={<Home username={username} />} />
+          <Route path="/" element={isAuthenticated() ? <Home username={username} /> : <Navigate to="/login" />} />
           <Route path="/about" element={isAuthenticated() ? <About username={username} /> : <Navigate to="/login" />} />
           <Route path="/settings" element={isAuthenticated() ? <Settings username={username} setUsername={setUsername} /> : <Navigate to="/login" />} />
           <Route path="/habits" element={isAuthenticated() ? <Habit username={username} /> : <Navigate to="/login" />} />
