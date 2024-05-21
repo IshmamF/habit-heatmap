@@ -34,8 +34,8 @@ const App = () => {
           <Route path="/settings" element={isAuthenticated() ? <Settings username={username} setUsername={setUsername} /> : <Navigate to="/login" />} />
           <Route path="/habits" element={isAuthenticated() ? <Habit username={username} /> : <Navigate to="/login" />} />
           <Route path="/add-habit" element={isAuthenticated() ? <AddHabit username={username} /> : <Navigate to="/login" />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage theme={theme} />} />
+          <Route path="/signup" element={<SignupPage theme={theme} />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
