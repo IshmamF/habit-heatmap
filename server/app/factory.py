@@ -1,15 +1,10 @@
-import os
-
 from flask import Flask, jsonify, render_template
 from json import JSONEncoder
 from flask_cors import CORS
-# from flask_bcrypt import Bcrypt
-# from flask_jwt_extended import JWTManager
-
+from flask_bcrypt import Bcrypt
 from bson import json_util, ObjectId
-from datetime import datetime, timedelta
+from datetime import datetime
 from app.api.endpoints import api_v1
-
 
 class MongoJsonEncoder(JSONEncoder):
     def default(self, obj):
@@ -25,7 +20,6 @@ def create_app():
     # APP_DIR = os.path.abspath(os.path.dirname(__file__))
     # STATIC_FOLDER = os.path.join(APP_DIR, 'build/static')
     # TEMPLATE_FOLDER = os.path.join(APP_DIR, 'build')
-
     app = Flask(__name__)
     CORS(app)
     app.json_encoder = MongoJsonEncoder
