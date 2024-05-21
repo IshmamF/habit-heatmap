@@ -1,7 +1,5 @@
 from typing import Union
 from flask import Blueprint, request, jsonify
-import bson
-import json
 from app.db import (
     addHeatMap,
     removeMetric,
@@ -18,10 +16,9 @@ from app.db import (
     users_db,
     ping_db
 )
-
 from flask_cors import CORS
-# from app.api.utils import expect
-from datetime import datetime
+from app.api.helpers import get_most_recent_active_notes, get_most_recent_data
+
 
 api_v1 = Blueprint("api_v1", "api_v1", url_prefix="/api/v1")
 
@@ -165,5 +162,32 @@ def update_username():
         heatmapDB = heatmap_db()
         updateUsername(req, heatmapDB)
         return jsonify({"msg": "Username updated successfully."}), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 400
+    
+
+@api_v1.route("/get_recent_habits", methods=["POST"])
+def recent_habits():
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
+    req = request.get_json()
+    try:
+        heatmapDB = heatmap_db()
+        habits = getHabits(req.get("username"), heatmapDB)['habits']
+        most_recent_data = get_most_recent_data(habits, 3)
+        return jsonify({"msg": "Recent Habits retrieved successfully.", "result":most_recent_data}), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 400
+    
+@api_v1.route("/get_recent_notes", methods=["POST"])
+def recent_notes():
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
+    req = request.get_json()
+    try:
+        heatmapDB = heatmap_db()
+        habits = getHabits(req.get("username"), heatmapDB)['habits']
+        most_recent_notes = get_most_recent_active_notes(habits, 3)
+        return jsonify({"msg": "Recent Notes retrieved successfully.", "result":most_recent_notes}), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
