@@ -11,7 +11,7 @@ const AddHabit = ({username}) => {
     const metric = formData.get('metric');
     const color = formData.get('color');
 
-    fetch('http://127.0.0.1:8080/api/v1/createHabit', {
+    fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/createHabit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

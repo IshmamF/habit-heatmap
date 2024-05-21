@@ -1,6 +1,6 @@
 export async function fetchHabits(username) {
     try {
-      const response = await fetch('http://127.0.0.1:8080/api/v1/getHabits', {
+      const response = await fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/getHabits', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
