@@ -15,3 +15,5 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "habit-heatmap-api" #Must be unique in Heroku
           heroku_email: "ishmamf2003@gmail.com"
+          appdir: "server"
+          remote_branch: "main"

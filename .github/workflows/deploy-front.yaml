@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Frontend
 
 on:
   push:
@@ -15,3 +15,5 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "habit-heatmap-client" #Must be unique in Heroku
           heroku_email: "ishmamf2003@gmail.com"
+          appdir: "controller"
+          remote_branch: "main"
