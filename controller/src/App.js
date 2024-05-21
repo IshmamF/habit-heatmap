@@ -7,12 +7,15 @@ import Home from './components/Pages/Home';
 import About from './components/Pages/About';
 import Settings from './components/Pages/Settings';
 import LoginPage from './components/Pages/Login';
-import SignupPage from './components/Pages/Signup'; 
-import { isAuthenticated } from './functions/auth';
+import SignupPage from './components/Pages/Signup';
+import Notes from './components/Pages/Notes'; 
+import ProtectedRoute from './components/ProtectedRoute';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from './firebase';
 
 const App = () => {
-  const currentTheme = localStorage.getItem('current_theme');
-  const [theme, setTheme] = useState(currentTheme ? currentTheme : 'light');
+  const [theme, setTheme] = useState(localStorage.getItem('current_theme') || 'light');
+  const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
     localStorage.setItem('current_theme', theme);
@@ -22,18 +25,63 @@ const App = () => {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 
+  const [username, setUsername] = useState("hello there");
+
   return (
     <div className={`transition-colors duration-500 ease-in-out h-screen ${theme === 'light' ? 'bg-gray-100 text-black' : 'bg-zinc-900 text-white'}`}>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <div className={`container mx-auto px-4 ${theme}`}>
         <Routes>
-          <Route path="/" element={isAuthenticated() ? <Home  /> : <Navigate to="/login" />} />
-          <Route path="/about" element={isAuthenticated() ? <About  /> : <Navigate to="/login" />} />
-          <Route path="/settings" element={isAuthenticated() ? <Settings /> : <Navigate to="/login" />} />
-          <Route path="/habits" element={isAuthenticated() ? <Habit  /> : <Navigate to="/login" />} />
-          <Route path="/add-habit" element={isAuthenticated() ? <AddHabit /> : <Navigate to="/login" />} />
           <Route path="/login" element={<LoginPage theme={theme} />} />
           <Route path="/signup" element={<SignupPage theme={theme} />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home username={username} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <ProtectedRoute>
+                <About username={username} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings username={username} setUsername={setUsername} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/habits"
+            element={
+              <ProtectedRoute>
+                <Habit username={username} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-habit"
+            element={
+              <ProtectedRoute>
+                <AddHabit username={username} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notes"
+            element={
+              <ProtectedRoute>
+                <Notes username={username} />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
