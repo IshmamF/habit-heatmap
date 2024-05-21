@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase';  // Correct the import path
 
 const SignupPage = ({ theme }) => {
   const [email, setEmail] = useState('');
@@ -9,28 +11,13 @@ const SignupPage = ({ theme }) => {
 
   const handleSignup = async (event) => {
     event.preventDefault();
-
     try {
-      const response = await fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/register', { // Update the URL to your backend
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, username, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Signup failed');
-      }
-
-      const data = await response.json();
-
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-
+      await createUserWithEmailAndPassword(auth, email, password);
+      console.log("Account Created")
       navigate('/');
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error:', error.message);
+      alert('Signup failed: ' + error.message);
     }
   };
 

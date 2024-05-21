@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase';
 
 const LoginPage = ({ theme }) => {
   const [email, setEmail] = useState('');
@@ -9,28 +11,14 @@ const LoginPage = ({ theme }) => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-
     try {
-      const response = await fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/login', { // Update the URL to your backend
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, username, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
-
-      const data = await response.json();
-
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log(`Login Successful! Welcome: ${user.displayName || user.email}`);
       navigate('/');
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error:', error.message);
+      alert('Login failed: ' + error.message);
     }
   };
 
