@@ -21,7 +21,8 @@ function getCorrectDate(date, format="mm/dd/yyyy") {
     }
 }
 
-export default function Heatmap({selectedHabit, username}) {
+export default function Heatmap({selectedHabit}) {
+    const username = localStorage.getItem('username');
     const [updatedHabit, setUpdatedHabit] = useState(selectedHabit['data']);
 
     const [theme, setTheme] = useState('light'); // State to track the current theme

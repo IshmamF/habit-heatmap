@@ -1,6 +1,7 @@
 import React from 'react'
 
-const AddHabit = ({username}) => {
+const AddHabit = () => {
+  const username = localStorage.getItem('username');
 
   function submitData(event) {
     event.preventDefault(); 

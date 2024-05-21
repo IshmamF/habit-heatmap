@@ -11,7 +11,7 @@ const SignupPage = ({ theme }) => {
     event.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3001/signup', { // Update the URL to your backend
+      const response = await fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/register', { // Update the URL to your backend
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

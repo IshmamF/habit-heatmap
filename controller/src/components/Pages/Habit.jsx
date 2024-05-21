@@ -3,7 +3,8 @@ import Heatmap from '../heatmap';
 import {fetchHabits, selectedHabitDetails } from '../../functions/habits';
 import HabitOptions from '../habitoptions';
 
-const Habit = ({username}) => {
+const Habit = () => {
+  const username = localStorage.getItem('username');
   const [habits, setHabits] = useState([]);
   const [selectedHabit, setSelectedHabit] = useState({"habitName": "Select a habit", "metric": "Select a habit", "color": "Select a habit", 'data': []});
 

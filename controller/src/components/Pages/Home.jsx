@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-function Home({ username }) {
+function Home() {
+    const username = localStorage.getItem('username');
     const [recentHabits, setRecentHabits] = useState([]);
     const [recentNotes, setRecentNotes] = useState([]);
     const [quote, setQuote] = useState('');

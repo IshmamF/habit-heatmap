@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import {fetchHabits, selectedHabitDetails } from '../../functions/habits';
 import HabitOptions from '../habitoptions';
 
-const Settings = ({username, setUsername}) => {
+const Settings = () => {
+    const [username, setUsername] = useState(localStorage.getItem('username'));
     const [habits, setHabits] = useState([]);
     const [selectedHabit, setSelectedHabit] = useState({"habitName": "Select a habit", "metric": "Select a habit", "color": "Select a habit"});
     const [button, setButton] = useState("");
