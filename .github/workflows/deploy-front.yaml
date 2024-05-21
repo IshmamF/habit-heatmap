@@ -9,7 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: git push heroku ${HEROKU_DEFAULT_BRANCH_NAME}:refs/heads/${HEROKU_DEFAULT_BRANCH_NAME} --force
+      - run: |
+          git push heroku master
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.13.15 # This is the action
         with:
