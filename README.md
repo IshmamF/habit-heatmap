@@ -11,95 +11,71 @@
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/IshmamF/habit-heatmap">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Habit Heatmap</h3>
 
   <p align="center">
-    project_description
+    A fun way to improve your lifestyle!
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/IshmamF/habit-heatmap"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://github.com/IshmamF/habit-heatmap">View Demo</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/IshmamF/habit-heatmap/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/IshmamF/habit-heatmap/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
 <!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+| No. | Section | Subsection |
+| --- | ------- | ---------- |
+| 1 | [About The Project](#about-the-project) | [Built With](#built-with) |
+| 2 | [Getting Started](#getting-started) | [Prerequisites](#prerequisites) |
+|   |   | [Installation](#installation) |
+| 3 | [Usage](#usage) |  |
+| 4 | [Roadmap](#roadmap) |  |
+| 5 | [Contributing](#contributing) |  |
+| 6 | [License](#license) |  |
+| 7 | [Contact](#contact) |  |
+| 8 | [Acknowledgments](#acknowledgments) |  |
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+![Product Name Screen Shot][product-screenshot]
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+Habit Heatmap is a web application that helps you track your habits and visualize your progress. It uses a heatmap to show you how well you are doing with your habits. The app is built with React, Tailwind, MongoDB, and Flask.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 
-* [![Next][Next.js]][Next-url]
 * [![React][React.js]][React-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
+* [![Tailwind][Tailwind.com]][Tailwind-url]
+* [![MongoDB][MongoDB.com]][MongoDB-url]
+* ![Flask][Flask.com]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-
-* npm
-
-  ```sh
-  npm install vite@latest
-  ```
-
-### Installation
-
 1. Get a free API Key at [api ninjas](https://api-ninjas.com/profile)
+
 2. Clone the repo
 
    ```sh
@@ -118,6 +94,37 @@ This is an example of how to list things you need to use the software and how to
    const API_KEY = 'ENTER YOUR API';
    ```
 
+#### Frontend
+
+1. Install Node.js
+2. Navigate to the frontend directory
+3. Run the following command to install the required packages
+
+   ```sh
+   npm install
+   ```
+
+4. Run the following command to start the development server
+
+   ```sh
+    npm start
+    ```
+
+#### Backend
+
+1. Install Python
+2. Run the following command to install the required packages
+
+   ```sh
+   pip install -r requirements.txt
+   ```
+
+3. Run the following command to start the development server
+
+   ```sh
+    python server/server.py
+    ```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
@@ -132,12 +139,12 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-* [ ] Feature 1
-* [ ] Feature 2
-* [ ] Feature 3
-  * [ ] Nested Feature
+* [ ] Habit Metrics
+* [ ] Accountability Partner
+* [ ] Social Sharing
+  * [ ] Allow users to share their progress on the app through posts and comments.
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/IshmamF/habit-heatmap/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -160,32 +167,33 @@ Don't forget to give the project a star! Thanks again!
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - <email@email_client.com>
+* <abrarhabib285@gmail.com>
+* <ishmamf2003@gmail.com>
+* <penayared16@gmail.com>
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+## Project Link
+
+[https://github.com/IshmamF/habit-heatmap](https://github.com/IshmamF/habit-heatmap)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* [Ishmam Fardin](https://github.com/IshmamF)
+* [Yared Pena](https://github.com/YaredPena)
+* [Abrar Habib](https://github.com/dddictionary)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Notes
-
-The shell.nix file is for me (Abrar) to use. Please don't remove that.
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/IshmamF/habit-heatmap.svg?style=for-the-badge
@@ -194,17 +202,13 @@ The shell.nix file is for me (Abrar) to use. Please don't remove that.
 [forks-url]: https://github.com/IshmamF/habit-heatmapnetwork/members
 [stars-shield]: https://img.shields.io/github/stars/IshmamF/habit-heatmap.svg?style=for-the-badge
 [stars-url]: https://github.com/IshmamF/habit-heatmap/stargazers
-[issues-shield]: https://github.com/IshmamF/habit-heatmap.svg?style=for-the-badge
-[issues-url]: https://github.com/IshmamF/habit-heatmap/issues
 [license-shield]: https://img.shields.io/github/license/IshmamF/habit-heatmap.svg?style=for-the-badge
 [license-url]: https://github.com/IshmamF/habit-heatmap/blob/main/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
+[product-screenshot]: images/frontend.png
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-Removed the testing thing
+[Flask.com]: https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white
+[Tailwind.com]: https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
+[Tailwind-url]: https://tailwindcss.com/
+[MongoDB.com]: https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white
+[MongoDB-url]: https://www.mongodb.com/
