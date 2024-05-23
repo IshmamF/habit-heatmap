@@ -16,6 +16,7 @@ def test_db_connection(ping):
     except Exception as e:
         return f"Error connecting to the database: {e}"
 
+# Find a specific user in the database
 def find_users(data):
     users = users_db()
     return users.count_documents({"email": data["email"]})
