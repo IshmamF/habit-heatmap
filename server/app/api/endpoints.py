@@ -1,12 +1,11 @@
-from flask import Blueprint, config, jsonify, request
+from flask import Blueprint, jsonify, request
 import bcrypt
 import jwt
 from datetime import datetime, timedelta
-from .helpers import token_required
 from flask_cors import CORS
 from datetime import datetime
+from app.api.helpers import get_most_recent_active_notes, get_most_recent_data
 from app.db import (
-    config,
     addHeatMap,
     find_user_by_email,
     find_users,
@@ -19,12 +18,9 @@ from app.db import (
     updateHabit,
     updateMetric,
     updateUsername,
+    heatmap_db,
+    ping_db
 )
-
-secret = config["JWT"]["SECRET"]
-print(secret)
-salt = bcrypt.gensalt()
-
 
 api_v1 = Blueprint("api_v1", "api_v1", url_prefix="/api/v1")
 
@@ -32,9 +28,8 @@ CORS(api_v1)
 
 
 @api_v1.route("/ping", methods=["GET"])
-@token_required
 def test_db():
-    ping = test_db_connection()
+    ping = ping_db()
     return jsonify(test_db_connection(ping))
 
 
@@ -111,117 +106,132 @@ def login():
     return jsonify({"status": status, "message": message, "data": res_data}), code
 
 
+@api_v1.route("/addMetric", methods=["POST"])
+def add_metric():
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
+    req = request.get_json()
+    try:
+        # Add the map to the database
+        heatmapDB = heatmap_db()
+        addHeatMap(req, heatmapDB)
+        return jsonify({"msg": "Data added to Habit successfully."}), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 400
+    
+@api_v1.route("/createHabit", methods=["POST"])
+def add_habit():
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
+    req = request.get_json()
+    try:
+        db = heatmap_db()
+        createHeatmap(req, db)
+        return jsonify({"msg": "Habit created successfully."}), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 400    
+
+@api_v1.route("/removeMetric", methods=["POST"])
+def remove_metric():
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
+    req = request.get_json()
+    try:
+        # Remove the metric from the database
+        heatmapDB = heatmap_db()
+        removeMetric(req, heatmapDB)
+        return jsonify({"msg": "Metric removed successfully."}), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 400
+    
 @api_v1.route("/removeHabit", methods=["POST"])
-@token_required
 def remove_habit():
-    message = ""
-    status = "fail"
-    code = 500
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
     req = request.get_json()
     try:
         # Remove the habit from the database
-        if not removeHabit(req):
-            message = "Habit not found."
-            code = 404
-        else:
-            message = "Habit removed successfully."
-            status = "success"
-            code = 200
-        return jsonify({"status": status,"message": message}), code
+        heatmapDB = heatmap_db()
+        removeHabit(req, heatmapDB)
+        return jsonify({"msg": "habit removed successfully."}), 200
     except Exception as e:
-        return jsonify({"status": status, "message": str(e)}), code
-
-
+        return jsonify({"msg": str(e)}), 400
+    
 @api_v1.route("/getHabits", methods=["POST"])
-@token_required
 def get_habits():
-    message = ""
-    status = "fail"
-    code = 500
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
     req = request.get_json()
-    username = req.get("username")
-    if not username:
-        message = "Username is required."
-        code = 400  
     try:
         # Get the habits from the database
-        habits = getHabits(username)
-        if habits in None:
-            message = "User not found."
-            code = 404
-        elif isinstance(habits, str):
-            message = habits
-            code = 400  
-        else:
-            message = "Habits retrieved successfully."
-            status = "success"
-            code = 200
-        return jsonify({"status": status, "message": message, "data": habits}), code
+        heatmapDB = heatmap_db()
+        habits = getHabits(req.get("username"), heatmapDB)
+        return jsonify({"msg": "Habits retrieved successfully.", "result":habits}), 200
     except Exception as e:
-        return jsonify({"status": status, "message": message}), code
-
-
+        return jsonify({"msg": str(e)}), 400
+    
 @api_v1.route("/updateHabit", methods=["POST"])
-@token_required
 def update_habit():
-    message = ""
-    status = "fail"
-    code = 500
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
     req = request.get_json()
     try:
         # Update the habit in the database
-        res = updateHabit(req)
-        if not res:
-            message = "Habit not found."
-            code = 404
-        else:
-            message = "Habit updated successfully."
-            status = "success"
-            code = 200
-        return jsonify({"status": status, "message": message}), code
+        heatmapDB = heatmap_db()
+        updateHabit(req, heatmapDB)
+        return jsonify({"msg": "Habit updated successfully."}), 200
     except Exception as e:
-        return jsonify({"status": status, "message": str(e)}), code
-
-
+        return jsonify({"msg": str(e)}), 400
+    
 @api_v1.route("/updateMetric", methods=["POST"])
-@token_required
 def update_metric():
-    message = ""
-    code = 500
-    status = "fail"
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
     req = request.get_json()
     try:
         # Update the metric in the database
-        res = updateMetric(req)
-        if not res:
-            message = "Metric or Habit not found."
-            code = 404
-        else:
-            message = "Metric updated successfully."
-            status = "success"
-            code = 200
-        return jsonify({"status": status, "message": message}), code
+        heatmapDB = heatmap_db()
+        updateMetric(req, heatmapDB)
+        return jsonify({"msg": "Metric updated successfully."}), 200
     except Exception as e:
-        return jsonify({"status": status, "message": str(e)}), code
-
-
+        return jsonify({"msg": str(e)}), 400
+    
 @api_v1.route("/updateUsername", methods=["POST"])
-@token_required
 def update_username():
-    message = ""
-    status = "fail"
-    code = 500
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
     req = request.get_json()
     try:
         # Update the username in the database
-        res = updateUsername(req)
-        if not res:
-            message = "Username not found."
-            code = 404
-        else:
-            message = "Username updated successfully."
-            status = "success"
-            code = 200
-        return jsonify({"status": status, "message": message}), code
+        heatmapDB = heatmap_db()
+        updateUsername(req, heatmapDB)
+        return jsonify({"msg": "Username updated successfully."}), 200
     except Exception as e:
-        return jsonify({"status": status, "message": str(e)}), code
+        return jsonify({"msg": str(e)}), 400
+    
+
+@api_v1.route("/get_recent_habits", methods=["POST"])
+def recent_habits():
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
+    req = request.get_json()
+    try:
+        heatmapDB = heatmap_db()
+        habits = getHabits(req.get("username"), heatmapDB)['habits']
+        most_recent_data = get_most_recent_data(habits, 3)
+        return jsonify({"msg": "Recent Habits retrieved successfully.", "result":most_recent_data}), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 400
+    
+@api_v1.route("/get_recent_notes", methods=["POST"])
+def recent_notes():
+    if not request.is_json:
+        return jsonify({"msg": "Not JSON request."}), 400
+    req = request.get_json()
+    try:
+        heatmapDB = heatmap_db()
+        habits = getHabits(req.get("username"), heatmapDB)['habits']
+        most_recent_notes = get_most_recent_active_notes(habits, 3)
+        return jsonify({"msg": "Recent Notes retrieved successfully.", "result":most_recent_notes}), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 400

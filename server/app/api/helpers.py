@@ -2,8 +2,6 @@ from datetime import datetime
 from functools import wraps
 from flask import request, jsonify
 import jwt
-from app.db import config
-
 
 def get_recent_habits(data):
     all_metrics = []
