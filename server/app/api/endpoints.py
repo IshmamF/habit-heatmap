@@ -1,10 +1,12 @@
+import configparser
+import os
 from flask import Blueprint, jsonify, request
 import bcrypt
 import jwt
 from datetime import datetime, timedelta
 from flask_cors import CORS
 from datetime import datetime
-from app.api.helpers import get_most_recent_active_notes, get_most_recent_data
+from app.api.helpers import get_most_recent_active_notes, get_most_recent_data, token_required
 from app.db import (
     addHeatMap,
     find_user_by_email,
@@ -19,8 +21,13 @@ from app.db import (
     updateMetric,
     updateUsername,
     heatmap_db,
-    ping_db
+    ping_db,
 )
+config = configparser.ConfigParser()
+config_file = os.path.join(os.path.dirname(__file__), ".ini")
+print(config_file)
+config.read("./server/.ini")
+secret = config["JWT"]["SECRET"]
 
 api_v1 = Blueprint("api_v1", "api_v1", url_prefix="/api/v1")
 
@@ -107,6 +114,7 @@ def login():
 
 
 @api_v1.route("/addMetric", methods=["POST"])
+@token_required
 def add_metric():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
@@ -120,6 +128,7 @@ def add_metric():
         return jsonify({"msg": str(e)}), 400
     
 @api_v1.route("/createHabit", methods=["POST"])
+@token_required
 def add_habit():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
@@ -132,6 +141,7 @@ def add_habit():
         return jsonify({"msg": str(e)}), 400    
 
 @api_v1.route("/removeMetric", methods=["POST"])
+@token_required
 def remove_metric():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
@@ -145,6 +155,7 @@ def remove_metric():
         return jsonify({"msg": str(e)}), 400
     
 @api_v1.route("/removeHabit", methods=["POST"])
+@token_required
 def remove_habit():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
@@ -158,6 +169,7 @@ def remove_habit():
         return jsonify({"msg": str(e)}), 400
     
 @api_v1.route("/getHabits", methods=["POST"])
+@token_required
 def get_habits():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
@@ -171,6 +183,7 @@ def get_habits():
         return jsonify({"msg": str(e)}), 400
     
 @api_v1.route("/updateHabit", methods=["POST"])
+@token_required
 def update_habit():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
@@ -184,6 +197,7 @@ def update_habit():
         return jsonify({"msg": str(e)}), 400
     
 @api_v1.route("/updateMetric", methods=["POST"])
+@token_required
 def update_metric():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
@@ -197,6 +211,7 @@ def update_metric():
         return jsonify({"msg": str(e)}), 400
     
 @api_v1.route("/updateUsername", methods=["POST"])
+@token_required
 def update_username():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
@@ -211,6 +226,7 @@ def update_username():
     
 
 @api_v1.route("/get_recent_habits", methods=["POST"])
+@token_required
 def recent_habits():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400
@@ -224,6 +240,7 @@ def recent_habits():
         return jsonify({"msg": str(e)}), 400
     
 @api_v1.route("/get_recent_notes", methods=["POST"])
+@token_required
 def recent_notes():
     if not request.is_json:
         return jsonify({"msg": "Not JSON request."}), 400

@@ -2,6 +2,10 @@ import os
 import configparser
 from pymongo import MongoClient
 
+config = configparser.ConfigParser()
+config_file = os.path.join(os.path.dirname(__file__), ".ini")
+config.read(config_file)
+
 def test_db_connection(ping):
     try:
         ping.insert_one({"ping": "1"})
@@ -24,17 +28,11 @@ def register(user):
     return users.insert_one(user)
 
 def heatmap_db():
-    config = configparser.ConfigParser()
-    config_file = os.path.join(os.path.dirname(__file__), ".ini")
-    config.read(config_file)
     client = MongoClient(config["PROD"]["DB_URI"])
     db = client.get_database("prod")
     return db.get_collection("heatmaps")
 
 def users_db():
-    config = configparser.ConfigParser()
-    config_file = os.path.join(os.path.dirname(__file__), ".ini")
-    config.read(config_file)
     client = MongoClient(config["PROD"]["DB_URI"])
     db = client.get_database("prod")
     users = db.get_collection("users")
@@ -42,9 +40,6 @@ def users_db():
     return users
 
 def ping_db():
-    config = configparser.ConfigParser()
-    config_file = os.path.join(os.path.dirname(__file__), ".ini")
-    config.read(config_file)
     client = MongoClient(config["PROD"]["DB_URI"])
     db = client.get_database("prod")
     return db.get_collection("ping")
