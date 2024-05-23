@@ -3,6 +3,9 @@ import React from 'react'
 const AddHabit = () => {
   const username = localStorage.getItem('username');
 
+  // The function sends the data to the backend to be submitted to the database once submit button is clicked
+  // An alert is shown if the habit is created successfully or not to let user know
+  // The user is then redirected to the habits page
   function submitData(event) {
     event.preventDefault(); 
   
