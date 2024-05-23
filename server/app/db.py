@@ -4,9 +4,9 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 load_dotenv()
 
+# Load the MongoDB URI from the .env file
 MongoURI = os.environ['MONGO_URI']
-
-
+# Connect to the MongoDB database
 client = MongoClient(MongoURI)
 db = client.get_database("prod")
 
