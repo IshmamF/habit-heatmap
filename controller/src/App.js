@@ -8,7 +8,6 @@ import About from './components/Pages/About';
 import Settings from './components/Pages/Settings';
 import LoginPage from './components/Pages/Login';
 import SignupPage from './components/Pages/Signup';
-import Notes from './components/Pages/Notes'; 
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './firebase';
@@ -71,14 +70,6 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <AddHabit username={username} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/notes"
-            element={
-              <ProtectedRoute>
-                <Notes username={username} />
               </ProtectedRoute>
             }
           />
