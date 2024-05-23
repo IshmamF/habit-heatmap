@@ -1,8 +1,6 @@
 import pytest
 import mongomock
 from app.db import (
-    addUser,
-    authenticate,
     addHeatMap,
     removeMetric,
     getHabits,
