@@ -7,6 +7,7 @@ config = configparser.ConfigParser()
 config_file = os.path.join(os.path.dirname(__file__), ".ini")
 config.read(config_file)
 
+# Test the database connection to ensure api endpoints and database works
 def test_db_connection(ping):
     try:
         ping.insert_one({"ping": "1"})
