@@ -17,9 +17,6 @@ jobs:
           heroku_app_name: "habit-heatmap-api"
           heroku_email: "ishmamf2003@gmail.com"
           appdir: "server"
-      - name: deploy to heroku
-        run: |
-          git push heroku master
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -44,6 +41,7 @@ jobs:
 
       - name: Run Program
         run: python server.py
+        working-directory: run/server/
       
       - name: Run tests
         run: python -m pytest
