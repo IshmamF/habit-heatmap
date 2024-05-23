@@ -18,7 +18,6 @@ const Navbar = ({ theme, toggleTheme }) => {
                     <li><Link to="/" className="text-lg font-medium transition-colors hover:opacity-80">Home</Link></li>
                     <li><Link to="/add-habit" className="text-lg font-medium transition-colors hover:opacity-80">Add Habit</Link></li>
                     <li><Link to="/habits" className="text-lg font-medium transition-colors hover:opacity-80">Habits</Link></li>
-                    <li><Link to="/about" className="text-lg font-medium transition-colors hover:opacity-80">Notes</Link></li>
                     <li><Link to="/settings" className="text-lg font-medium transition-colors hover:opacity-80">Settings</Link></li>
                     <li><Link to="/about" className="text-lg font-medium transition-colors hover:opacity-80">About</Link></li>
                 </ul>

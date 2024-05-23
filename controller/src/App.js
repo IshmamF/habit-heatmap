@@ -29,7 +29,7 @@ const App = () => {
   return (
     <div className={`transition-colors duration-500 ease-in-out h-screen ${theme === 'light' ? 'bg-gray-100 text-black' : 'bg-zinc-900 text-white'}`}>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <div className={`container mx-auto px-4 ${theme}`}>
+      <div className={`container mx-auto px-4 mt-12 ${theme}`}>
         <Routes>
           <Route path="/login" element={<LoginPage theme={theme} />} />
           <Route path="/signup" element={<SignupPage theme={theme} />} />
