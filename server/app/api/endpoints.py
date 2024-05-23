@@ -23,12 +23,8 @@ from app.db import (
     heatmap_db,
     ping_db,
 )
-config = configparser.ConfigParser()
-config_file = os.path.join(os.path.dirname(__file__), ".ini")
-print(config_file)
-config.read("./server/.ini")
-secret = config["JWT"]["SECRET"]
 
+secret = "Ishmam"
 api_v1 = Blueprint("api_v1", "api_v1", url_prefix="/api/v1")
 
 CORS(api_v1)
