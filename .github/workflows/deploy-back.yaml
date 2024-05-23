@@ -3,6 +3,8 @@ name: Deploy Backend
 on:
   push:
     branches: [ main ]
+    paths: 
+      - 'server/**'
 
 jobs:
   build:
@@ -36,9 +38,6 @@ jobs:
           echo "Working Directory: $(pwd)"
           echo "Contents of Working Directory: $(ls -l)"
           echo "Contents of site-packages: $(ls -l venv/lib/python*/site-packages)"
-
-      - name: Run Program
-        run: python server/server.py
       
       - name: Run tests
         working-directory: run/server/
