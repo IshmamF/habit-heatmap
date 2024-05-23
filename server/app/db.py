@@ -1,11 +1,14 @@
 import os
 import configparser
 from pymongo import MongoClient
+from dotenv import load_dotenv
+load_dotenv()
 
-# Load the database connection information from .ini file
-config = configparser.ConfigParser()
-config_file = os.path.join(os.path.dirname(__file__), ".ini")
-config.read(config_file)
+MongoURI = os.environ['MONGO_URI']
+
+
+client = MongoClient(MongoURI)
+db = client.get_database("prod")
 
 # Test the database connection to ensure api endpoints and database works
 def test_db_connection(ping):
@@ -31,20 +34,14 @@ def register(user):
     return users.insert_one(user)
 
 def heatmap_db():
-    client = MongoClient(config["PROD"]["DB_URI"])
-    db = client.get_database("prod")
     return db.get_collection("heatmaps")
 
 def users_db():
-    client = MongoClient(config["PROD"]["DB_URI"])
-    db = client.get_database("prod")
     users = db.get_collection("users")
     users.create_index("username", unique=True)
     return users
 
 def ping_db():
-    client = MongoClient(config["PROD"]["DB_URI"])
-    db = client.get_database("prod")
     return db.get_collection("ping")
     
 def addHeatMap(request, heatmaps):
