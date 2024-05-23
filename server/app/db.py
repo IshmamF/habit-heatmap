@@ -2,6 +2,7 @@ import os
 import configparser
 from pymongo import MongoClient
 
+# Load the database connection information from .ini file
 config = configparser.ConfigParser()
 config_file = os.path.join(os.path.dirname(__file__), ".ini")
 config.read(config_file)
