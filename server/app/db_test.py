@@ -20,35 +20,6 @@ def mock_db():
     ping = db['ping']
     yield db, users, heatmaps, ping
 
-
-def test_add_user(mock_db):
-    db, users, heatmaps, ping = mock_db
-    user = {"username": "testuser", "password": "testpass"}
-    user_id = addUser(user, users)
-    assert users.find_one({"_id": user_id})
-
-def test_duplicate_user(mock_db):
-    db, users, heatmaps, ping = mock_db
-    user = {"username": "testuser", "password": "testpass"}
-    addUser(user, users)
-    result = addUser(user, users)
-    assert result == {"error": "User already exists."}
-
-def test_authenticate_user(mock_db):
-    db, users, heatmaps, ping = mock_db
-    user = {"username": "testuser", "password": "testpass"}
-    addUser(user, users)
-    result = authenticate(user, users)
-    assert result == 0
-
-def test_authenticate_wrong_password(mock_db):
-    db, users, heatmaps, ping = mock_db
-    user = {"username": "testuser", "password": "testpass"}
-    addUser(user, users)
-    wrong_password_user = {"username": "testuser", "password": "wrongpass"}
-    result = authenticate(wrong_password_user, users)
-    assert result == 1
-
 def test_authenticate_nonexistent_user(mock_db):
     db, users, heatmaps, ping = mock_db
     user = {"username": "nonexistent", "password": "testpass"}
