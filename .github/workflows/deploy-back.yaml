@@ -40,6 +40,6 @@ jobs:
           echo "Contents of site-packages: $(ls -l venv/lib/python*/site-packages)"
       
       - name: Run tests
-        working-directory: run/server/
+        working-directory: server/
         run: python -m pytest
           
