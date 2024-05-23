@@ -1,4 +1,4 @@
-name: Deploy Backend
+name: Deploy Frontend
 
 on:
     push:
@@ -28,11 +28,14 @@ jobs:
             node-version: ${{ matrix.node-version }}
             cache: 'npm'
       - name: Run CI command
+        working-directory: controller/
         run: npm ci
 
       - name: Build
+        working-directory: controller/
         run: npm run build
       
       - name: Run the tests
+        working-directory: controller/
         run: npm run test -a
           
