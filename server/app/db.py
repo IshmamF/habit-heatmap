@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Load the MongoDB URI from the .env file
-MongoURI = os.environ['MONGO_URI']
+# MongoURI = os.environ['MONGO_URI']
+MongoURI = "mongodb+srv://habitmap:habit@habit-heatmap.zqordn7.mongodb.net/?retryWrites=true&w=majority&appName=habit-heatmap"
 # Connect to the MongoDB database
 client = MongoClient(MongoURI)
 db = client.get_database("prod")
@@ -24,7 +25,7 @@ def find_users(data):
     users = users_db()
     return users.count_documents({"email": data["email"]})
 
-
+# Finds a specific user by their email
 def find_user_by_email(email):
     users = users_db()
     return users.find_one({"email": email})
