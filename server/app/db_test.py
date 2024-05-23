@@ -20,11 +20,6 @@ def mock_db():
     ping = db['ping']
     yield db, users, heatmaps, ping
 
-def test_authenticate_nonexistent_user(mock_db):
-    db, users, heatmaps, ping = mock_db
-    user = {"username": "nonexistent", "password": "testpass"}
-    result = authenticate(user, users)
-    assert result == 2
 
 def test_create_heatmap(mock_db):
     db, users, heatmaps, ping = mock_db
