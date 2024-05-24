@@ -24,8 +24,6 @@ const App = () => {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 
-  const [username, setUsername] = useState("hello there");
-
   return (
     <div className={`transition-colors duration-500 ease-in-out h-screen ${theme === 'light' ? 'bg-gray-100 text-black' : 'bg-zinc-900 text-white'}`}>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
@@ -37,7 +35,7 @@ const App = () => {
             path="/"
             element={
               <ProtectedRoute>
-                <Home theme={theme} username={username} />
+                <Home theme={theme} />
               </ProtectedRoute>
             }
           />
@@ -45,7 +43,7 @@ const App = () => {
             path="/about"
             element={
               <ProtectedRoute>
-                <About theme={theme} username={username} />
+                <About theme={theme} />
               </ProtectedRoute>
             }
           />
@@ -53,7 +51,7 @@ const App = () => {
             path="/settings"
             element={
               <ProtectedRoute>
-                <Settings theme={theme} username={username} setUsername={setUsername} />
+                <Settings theme={theme} />
               </ProtectedRoute>
             }
           />
@@ -61,7 +59,7 @@ const App = () => {
             path="/habits"
             element={
               <ProtectedRoute>
-                <Habit theme={theme} username={username} />
+                <Habit theme={theme} />
               </ProtectedRoute>
             }
           />
@@ -69,7 +67,7 @@ const App = () => {
             path="/add-habit"
             element={
               <ProtectedRoute>
-                <AddHabit theme={theme} username={username} />
+                <AddHabit theme={theme}/>
               </ProtectedRoute>
             }
           />
