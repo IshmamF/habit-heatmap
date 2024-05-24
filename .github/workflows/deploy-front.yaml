@@ -9,9 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x, 20.x]
     environment: 
       name: habit-heatmap
     steps:
@@ -25,8 +22,12 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
-            node-version: ${{ matrix.node-version }}
+            node-version: '20.x'
             cache: 'npm'
+      - name: Install dependencies
+        working-directory: controller/
+        run: npm install
+        
       - name: Build
         working-directory: controller/
         run: npm run build
