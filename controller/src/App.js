@@ -37,7 +37,7 @@ const App = () => {
             path="/"
             element={
               <ProtectedRoute>
-                <Home username={username} />
+                <Home theme={theme} username={username} />
               </ProtectedRoute>
             }
           />
@@ -45,7 +45,7 @@ const App = () => {
             path="/about"
             element={
               <ProtectedRoute>
-                <About username={username} />
+                <About theme={theme} username={username} />
               </ProtectedRoute>
             }
           />
@@ -53,7 +53,7 @@ const App = () => {
             path="/settings"
             element={
               <ProtectedRoute>
-                <Settings username={username} setUsername={setUsername} />
+                <Settings theme={theme} username={username} setUsername={setUsername} />
               </ProtectedRoute>
             }
           />
@@ -61,7 +61,7 @@ const App = () => {
             path="/habits"
             element={
               <ProtectedRoute>
-                <Habit username={username} />
+                <Habit theme={theme} username={username} />
               </ProtectedRoute>
             }
           />
@@ -69,7 +69,7 @@ const App = () => {
             path="/add-habit"
             element={
               <ProtectedRoute>
-                <AddHabit username={username} />
+                <AddHabit theme={theme} username={username} />
               </ProtectedRoute>
             }
           />
