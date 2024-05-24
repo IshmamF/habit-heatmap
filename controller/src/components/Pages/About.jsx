@@ -1,19 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-const About = () => {
-  const username = localStorage.getItem('username');
+const About = ({ theme }) => {
+  const [text, setText] = useState('');
+  const bioText = "Habit Heatmap is a goal tracker that will allow users to mark their goals and activities through the use of heatmaps. This project was created by Ishmam Fardin, Abrar Habib, and Yared Pena";
+
+  useEffect(() => {
+    let index = 0;
+    let typingTimeout;
+
+    const typingEffect = () => {
+      if (index < bioText.length) {
+        setText((prev) => prev + bioText.charAt(index));
+        index++;
+        typingTimeout = setTimeout(typingEffect, 50);
+      }
+    };
+
+    typingEffect();
+
+    return () => {
+      clearTimeout(typingTimeout);
+    };
+  }, [bioText]);
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-4">About</h1>
-      <p className="text-lg">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis sagittis arcu.
-        Integer bibendum nulla nec semper aliquet. Donec nec fermentum dolor. 
-        Fusce eget velit nec purus vulputate fermentum.
-      </p>
-      <p className="text-lg mt-4">
-        Nulla facilisi. Nam nec nisi non justo maximus finibus. Duis feugiat fermentum enim, 
-        et posuere velit consequat eu.
-      </p>
+    <div className={`flex items-center justify-center min-h-screen transition-all duration-500 ease-in-out ${theme === 'light' ? 'bg-gray-100 text-black' : 'bg-zinc-900 text-white'}`}>
+      <div className={`p-8 rounded shadow-md w-full max-w-md transition-all duration-500 ease-in-out ${theme === 'light' ? 'bg-white' : 'bg-gray-800'}`}>
+        <h2 className="text-3xl font-bold mb-4">About Habit Heatmap</h2>
+        <p className="text-lg">{text}</p>
+      </div>
     </div>
   );
 };
