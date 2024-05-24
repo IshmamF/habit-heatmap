@@ -122,6 +122,7 @@ export default function Heatmap({selectedHabit}) {
             }
             )
         } else {
+            // send delete request to backend
             fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/removeMetric', {
                 method: 'POST',
                 headers: {

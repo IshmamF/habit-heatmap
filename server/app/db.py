@@ -154,7 +154,7 @@ def updateMetric(request, heatmaps):
     try:
         username = request["username"]
         habitName = request["habitName"]
-        habitData = request["date"]
+        habitData = request["data"]
         newMetric = request.get("value")
         newNote = request.get("note")
 
