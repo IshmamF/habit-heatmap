@@ -3,9 +3,7 @@ name: Deploy Frontend
 on:
     push:
         branches: main
-    pull_request:
-        branches: main
-
+        
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,24 +17,19 @@ jobs:
           heroku_app_name: "habit-heatmap-client"
           heroku_email: "ishmamf2003@gmail.com"
           appdir: "controller"
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - name: Use Node.js 
+        uses: actions/setup-node@v3
         with:
-            node-version: '20.x'
-            cache: 'npm'
+            node-version: '21'
+
       - name: Install dependencies
-        working-directory: controller/
-        run: npm install
+        run: cd controller && npm install
         
       - name: Build
         working-directory: controller/
-        run: npm run build
-        
-      - name: Run CI command
-        working-directory: controller/
-        run: npm ci
+        run: cd controller && npm run build
       
       - name: Run the tests
         working-directory: controller/
-        run: npm run test -a
+        run: cd controller && npm run test -a
           
