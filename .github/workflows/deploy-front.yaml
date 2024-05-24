@@ -1,4 +1,4 @@
-name: Deploy Frontend
+name: Run Frontend Test # frontend is deployed automatically on Vercel
 
 on:
   push:
@@ -26,10 +26,4 @@ jobs:
         run: cd controller && CI=false npm run build --if-present
       - name: Run the tests
         run: cd controller && npm run test -a
-      - uses: akhileshns/heroku-deploy@v3.13.15 
-        with:
-            heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-            heroku_app_name: "habit-heatmap-client"
-            heroku_email: "ishmamf2003@gmail.com"
-            appdir: "controller"
           
