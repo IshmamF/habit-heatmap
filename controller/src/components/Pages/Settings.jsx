@@ -28,7 +28,6 @@ const Settings = () => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              "Authorization": "Bearer " + localStorage.getItem("token")
             },
             body: JSON.stringify({"username": username, "habitName": selectedHabit.habitName}),
           }).then(response => {
@@ -56,7 +55,6 @@ const Settings = () => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              "Authorization": "Bearer " + localStorage.getItem("token")
             },
             body: JSON.stringify({"username": username, "habitName": selectedHabit.habitName, "newHabitName": title, "metric": metric, "color": color}),
           }).then(response => {
@@ -92,7 +90,6 @@ const Settings = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          "Authorization": "Bearer " + localStorage.getItem("token")
         },
         body: JSON.stringify({"username": username, "newUsername": newUsername}),
       }).then(response => {
