@@ -3,6 +3,8 @@ name: Run Frontend Test # frontend is deployed automatically on Vercel
 on:
   push:
     branches: [ main ]
+    paths: 
+      - 'controller/**'
         
 jobs:
   deploy:
