@@ -7,7 +7,7 @@ function Home({ theme }) {
     const [quote, setQuote] = useState('');
 
     useEffect(() => {
-        fetch('http://127.0.0.1:8080/api/v1/get_recent_habits', {
+        fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/get_recent_habits', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ function Home({ theme }) {
                 console.error('There was a problem with the fetch operation:', error);
             });
 
-        fetch('http://127.0.0.1:8080/api/v1/get_recent_notes', {
+        fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/get_recent_notes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
