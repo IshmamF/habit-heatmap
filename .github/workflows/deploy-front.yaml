@@ -1,26 +1,27 @@
 name: Deploy Frontend
 
 on:
-    push:
-        branches: main
+  push:
+    branches: [ main ]
         
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: 
-      name: habit-heatmap
+    strategy:
+        matrix:
+            node-version: [20.x, 21.x]
     steps:
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.13.15 
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "habit-heatmap-client"
-          heroku_email: "ishmamf2003@gmail.com"
-          appdir: "controller"
-      - name: Use Node.js 
+            heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+            heroku_app_name: "habit-heatmap-client"
+            heroku_email: "ishmamf2003@gmail.com"
+            appdir: "controller"
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-            node-version: '21'
+            node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
         run: cd controller && npm install
