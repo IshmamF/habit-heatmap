@@ -55,8 +55,7 @@ export default function Heatmap({selectedHabit}) {
         fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/addMetric', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                "Authorization": "Bearer " + localStorage.getItem("token")
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({"habitName": selectedHabit.habitName, "data": data, "username": username}),
         }).then(response => {
@@ -100,7 +99,6 @@ export default function Heatmap({selectedHabit}) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    "Authorization": "Bearer " + localStorage.getItem("token")
                 },
                 body: JSON.stringify({"habitName": selectedHabit.habitName, "date": formattedDate, "value": data.value, "note":data.note, "username": username}),
             }).then(response => {
@@ -126,7 +124,6 @@ export default function Heatmap({selectedHabit}) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    "Authorization": "Bearer " + localStorage.getItem("token")
                 },
                 body: JSON.stringify({"habitName": selectedHabit.habitName, "date": formattedDate, "username": username}),
             }).then(response => {
