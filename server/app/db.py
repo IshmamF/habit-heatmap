@@ -67,9 +67,7 @@ def removeMetric(request, heatmaps):
     try:
         username = request["username"]
         habitName = request["habitName"]
-        if "date" not in request:
-            raise ValueError("Missing 'date' in the request payload.")
-        habitData = request["date"]
+        habitData = request["data"]
 
         user_data = heatmaps.find_one({"username": username})
         if not user_data:
@@ -78,18 +76,10 @@ def removeMetric(request, heatmaps):
         habits = user_data["habits"]
         habit_index = next((i for i, habit in enumerate(habits) if habit['habitName'] == habitName), None)
 
-        if habit_index is None:
-            raise ValueError(f"Habit {habitName} not found for user {username}.")
-
-        habit = habits[habit_index]
-        metric_index = next((i for i, metric in enumerate(habit["data"]) if metric['date'] == habitData), None)
-
-        if metric_index is None:
-            raise ValueError(f"Metric with date {habitData} not found in habit {habitName} for user {username}.")
 
         heatmaps.find_one_and_update(
             {"username": username},
-            {"$pull": {f"habits.{habit_index}.data": {"date": habitData}}},
+            {"$pull": {f"habits.{habit_index}.data": habitData}},
             upsert=True
         )
     except Exception as e:
