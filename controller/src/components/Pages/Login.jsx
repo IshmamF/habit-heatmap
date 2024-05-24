@@ -15,6 +15,8 @@ const LoginPage = ({ theme }) => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log(`Login Successful! Welcome: ${user.displayName || user.email}`);
+      console.log("use", user);
+      console.log("username: ", username);
       localStorage.setItem('username', username);
       navigate('/');
     } catch (error) {
