@@ -128,10 +128,10 @@ To get a local copy up and running follow these simple example steps.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## CI/CD
-  Backend: https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/ping
-  Deployed on Heroku, Go to [deploy-back github actions](https://github.com/IshmamF/habit-heatmap/.github/workflow/deploy-back.yaml) 
-  Frontend: https://habit-heatmap.vercel.app/
-  Deployed on Vercel, Go to [deploy-back github actions](https://github.com/IshmamF/habit-heatmap/.github/workflow/deploy-front.yaml) 
+  Backend: https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/ping <br>
+  Deployed on Heroku, Go to [deploy-back github actions](https://github.com/IshmamF/habit-heatmap/blob/main/.github/workflows/deploy-back.yaml) <br>
+  Frontend: https://habit-heatmap.vercel.app/ <br>
+  Deployed on Vercel, Go to [deploy-back github actions](https://github.com/IshmamF/habit-heatmap/blob/main/.github/workflows/deploy-front.yaml)  <br>
   Vercel has automatic updates so adding CD to github actions isn't necessary for frontend. 
   
 ## Usage
