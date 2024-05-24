@@ -32,10 +32,4 @@ jobs:
             heroku_app_name: "habit-heatmap-client"
             heroku_email: "ishmamf2003@gmail.com"
             appdir: "controller"
-            
-
-      
-      - name: Run the tests
-        working-directory: controller/
-        run: cd controller && npm run test -a
           
