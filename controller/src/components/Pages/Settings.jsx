@@ -3,7 +3,7 @@ import {fetchHabits, selectedHabitDetails } from '../../functions/habits';
 import HabitOptions from '../habitoptions';
 
 const Settings = () => {
-    const [username, setUsername] = useState(localStorage.getItem('username'));
+    const username = useState(localStorage.getItem('username'));
     const [habits, setHabits] = useState([]);
     const [selectedHabit, setSelectedHabit] = useState({"habitName": "Select a habit", "metric": "Select a habit", "color": "Select a habit"});
     const [button, setButton] = useState("");
@@ -94,7 +94,7 @@ const Settings = () => {
         body: JSON.stringify({"username": username, "newUsername": newUsername}),
       }).then(response => {
         if (response.ok) {
-          setUsername(newUsername);
+          localStorage.setItem('username', newUsername);
           console.log(response.json());
         }
       }).catch((error) => {

@@ -80,18 +80,20 @@ export default function Heatmap({selectedHabit}) {
         const note = updateData.get('note');
         const formattedDate = getCorrectDate(date, "yyyy/mm/dd");
         console.log("metric", value, "note", note, "date", formattedDate)
-        let data;
+        let newdata;
+        let deleteData;
         for (let info of updatedHabit) {
             if (info.date === formattedDate) {
-                data = info;
+                newdata = info;
+                deleteData = info;
                 break;
             }
         }
         if (value) {
-            data.value = value;
+            newdata.value = value;
         }
         if (note) {
-            data.note = note;
+            newdata.note = note;
         }
 
         if (button === "update") {
@@ -100,13 +102,13 @@ export default function Heatmap({selectedHabit}) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({"habitName": selectedHabit.habitName, "date": formattedDate, "value": data.value, "note":data.note, "username": username}),
+                body: JSON.stringify({"habitName": selectedHabit.habitName, "date": formattedDate, "value": newdata.value, "note":newdata.note, "username": username}),
             }).then(response => {
                 if (response.ok) {
                     console.log(response.json());
                     const newHabit = updatedHabit.map(info => {
                         if (info.date === formattedDate) {
-                            return data;
+                            return newdata;
                         }
                         return info;
                     });
@@ -125,11 +127,12 @@ export default function Heatmap({selectedHabit}) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({"habitName": selectedHabit.habitName, "date": formattedDate, "username": username}),
+                body: JSON.stringify({"habitName": selectedHabit.habitName, "data": deleteData, "username": username}),
             }).then(response => {
                 if (response.ok) {
                     console.log(response.json());
                     const newHabit = updatedHabit.filter(info => info.date !== formattedDate);
+                    console.log(newHabit)
                     cal && cal.fill(newHabit);
                     setUpdatedHabit(newHabit);
                 } else {
