@@ -12,6 +12,7 @@ const Habit = ({ theme }) => {
     color: "Select a habit",
     data: []
   });
+  const [updatedHabit, setUpdatedHabit] = useState([]);
 
   const [notes, setNotes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -28,7 +29,6 @@ const Habit = ({ theme }) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        "Authorization": "Bearer " + localStorage.getItem("token")
       },
       body: JSON.stringify({ username }),
     })
@@ -38,9 +38,17 @@ const Habit = ({ theme }) => {
     });
   }, [username]);
 
-  function handleChange(event) {
-    setSelectedHabit(selectedHabitDetails(event.target.value, habits));
+  useEffect(() => {
+    setUpdatedHabit(selectedHabit.data);
+  }, [selectedHabit]);
+
+
+  async function handleChange(event) {
+    const selected = selectedHabitDetails(event.target.value, habits);
+    setSelectedHabit(selected);
+    setUpdatedHabit(selected.data);
   }
+
 
   function handleSearchChange(event) {
     setSearchQuery(event.target.value);
@@ -52,7 +60,7 @@ const Habit = ({ theme }) => {
   return (
     <div>
       <HabitOptions habits={habits} handleChange={handleChange}></HabitOptions>
-      <Heatmap selectedHabit={selectedHabit} setSelectedHabit={setSelectedHabit} username={username}></Heatmap>
+      <Heatmap selectedHabit={selectedHabit} updatedHabit={updatedHabit} setUpdatedHabit = {setUpdatedHabit} ></Heatmap>
 
       <div className="mt-8">
         <input

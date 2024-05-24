@@ -67,19 +67,13 @@ def removeMetric(request, heatmaps):
     try:
         username = request["username"]
         habitName = request["habitName"]
-        habitData = request["data"]
+        habitDate = request["date"]
 
-        user_data = heatmaps.find_one({"username": username})
-        if not user_data:
-            raise ValueError(f"User {username} not found.")
-
-        habits = user_data["habits"]
-        habit_index = next((i for i, habit in enumerate(habits) if habit['habitName'] == habitName), None)
-
+        habit_index = next((i for i, habit in enumerate(heatmaps.find_one({"username": username})["habits"]) if habit['habitName'] == habitName), None)
 
         heatmaps.find_one_and_update(
             {"username": username},
-            {"$pull": {f"habits.{habit_index}.data": habitData}},
+            {"$pull": {f"habits.{habit_index}.data": {'date': habitDate}}},
             upsert=True
         )
     except Exception as e:
@@ -154,13 +148,13 @@ def updateMetric(request, heatmaps):
     try:
         username = request["username"]
         habitName = request["habitName"]
-        habitData = request["data"]
-        newMetric = request.get("value")
-        newNote = request.get("note")
+        habitDate = request["date"]
+        newMetric = request.get("newValue")
+        newNote = request.get("newNote")
 
         # Find the index of the habit object in the habits array
         habit_index = next((i for i, habit in enumerate(heatmaps.find_one({"username": username})["habits"]) if habit['habitName'] == habitName), None)
-        metric_index = next((i for i, metric in enumerate(heatmaps.find_one({"username": username})["habits"][habit_index]["data"]) if metric['date'] == habitData['date']), None)
+        metric_index = next((i for i, metric in enumerate(heatmaps.find_one({"username": username})["habits"][habit_index]["data"]) if metric['date'] == habitDate), None)
 
         if habit_index is not None:
             heatmaps.find_one_and_update(
@@ -170,6 +164,7 @@ def updateMetric(request, heatmaps):
             )
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
+
 
 def updateUsername(request, heatmaps):
     try:

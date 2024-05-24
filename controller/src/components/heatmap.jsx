@@ -21,13 +21,14 @@ function getCorrectDate(date, format="mm/dd/yyyy") {
     }
 }
 
-export default function Heatmap({selectedHabit}) {
+export default function Heatmap({selectedHabit, updatedHabit, setUpdatedHabit}) {
     const username = localStorage.getItem('username');
-    const [updatedHabit, setUpdatedHabit] = useState(selectedHabit['data']);
+    //const [updatedHabit, setUpdatedHabit] = useState(selectedHabit.data);
+    console.log(updatedHabit)
 
     const [theme, setTheme] = useState('light'); // State to track the current theme
     const [cal, setCal] = useState(null); // State to hold the CalHeatmap instance
-    console.log('selectedHabit:', selectedHabit);
+    // console.log('selectedHabit:', selectedHabit);
     const colors = {
         'green': ['#14432a', '#166b34', '#37a446', '#4dd05a'],
         'orange': ['#7f2f00', '#b34700', '#ff6600', '#ff9933'],
@@ -61,7 +62,7 @@ export default function Heatmap({selectedHabit}) {
         }).then(response => {
             if (response.ok) {
                 console.log(response.json());
-                const newHabit = selectedHabit.data.concat(data);
+                const newHabit = [...updatedHabit, data];
                 cal && cal.fill(newHabit);
                 setUpdatedHabit(newHabit);
             } else {
@@ -80,21 +81,22 @@ export default function Heatmap({selectedHabit}) {
         const note = updateData.get('note');
         const formattedDate = getCorrectDate(date, "yyyy/mm/dd");
         console.log("metric", value, "note", note, "date", formattedDate)
-        let newdata;
-        let deleteData;
-        for (let info of updatedHabit) {
-            if (info.date === formattedDate) {
-                newdata = info;
-                deleteData = info;
-                break;
-            }
-        }
+        
+        let newdata = updatedHabit.find(info => {
+            const infoDateFormatted = getCorrectDate(new Date(info.date), "yyyy/mm/dd");
+            return infoDateFormatted === formattedDate;
+        });
+        let oldData = updatedHabit.find(info => {
+            const infoDateFormatted = getCorrectDate(new Date(info.date), "yyyy/mm/dd");
+            return infoDateFormatted === formattedDate;
+        });
         if (value) {
             newdata.value = value;
         }
         if (note) {
             newdata.note = note;
         }
+        newdata.date = formattedDate;
 
         if (button === "update") {
             fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/updateMetric', {
@@ -102,7 +104,7 @@ export default function Heatmap({selectedHabit}) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({"habitName": selectedHabit.habitName, "date": formattedDate, "value": newdata.value, "note":newdata.note, "username": username}),
+                body: JSON.stringify({"habitName": selectedHabit.habitName, "data": newdata, "username": username, "oldData": oldData}),
             }).then(response => {
                 if (response.ok) {
                     console.log(response.json());
@@ -112,6 +114,7 @@ export default function Heatmap({selectedHabit}) {
                         }
                         return info;
                     });
+                    console.log(newHabit);
                     cal && cal.fill(newHabit);
                     setUpdatedHabit(newHabit);
                 } else {
@@ -123,17 +126,16 @@ export default function Heatmap({selectedHabit}) {
             )
         } else {
             // send delete request to backend
-            fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/removeMetric', {
+            fetch('http://127.0.0.1:8080/api/v1/removeMetric', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({"habitName": selectedHabit.habitName, "data": deleteData, "username": username}),
+                body: JSON.stringify({"habitName": selectedHabit.habitName, "date": formattedDate, "username": username}),
             }).then(response => {
                 if (response.ok) {
-                    console.log(response.json());
                     const newHabit = updatedHabit.filter(info => info.date !== formattedDate);
-                    console.log(newHabit)
+                    console.log(newHabit);
                     cal && cal.fill(newHabit);
                     setUpdatedHabit(newHabit);
                 } else {
@@ -156,9 +158,7 @@ export default function Heatmap({selectedHabit}) {
 
         cal && cal.on("click", (event, timestamp, number) => {
             setDate(new Date(timestamp));
-            console.log('date:', date);
-            console.log("timestamp", timestamp);
-            console.log("habit", updatedHabit);
+            console.log("number", number);
             if (number) {
                 setOpenUpdate(o => !o);
             } else {
