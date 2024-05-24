@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: cd controller && npm install
       - name: Build
-        run: cd controller && npm run build --if-present
+        run: cd controller && CI=false npm run build --if-present
       - name: Run the tests
         run: cd controller && npm run test -a
       - uses: akhileshns/heroku-deploy@v3.13.15 
