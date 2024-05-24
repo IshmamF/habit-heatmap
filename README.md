@@ -127,7 +127,13 @@ To get a local copy up and running follow these simple example steps.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- USAGE EXAMPLES -->
+## CI/CD
+  Backend: https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/ping
+  Deployed on Heroku, Go to [deploy-back github actions](https://github.com/IshmamF/habit-heatmap/.github/workflow/deploy-back.yaml) 
+  Frontend: https://habit-heatmap.vercel.app/
+  Deployed on Vercel, Go to [deploy-back github actions](https://github.com/IshmamF/habit-heatmap/.github/workflow/deploy-front.yaml) 
+  Vercel has automatic updates so adding CD to github actions isn't necessary for frontend. 
+  
 ## Usage
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
