@@ -64,9 +64,9 @@ function Home({ theme }) {
                 return response.json();
             })
             .then(data => {
-                const suitableQuotes = data.filter(quote => quote.quote.length <= 150); // Filter out long quotes
+                const suitableQuotes = data.filter(quote => quote.quote.length <= 150);
                 if (suitableQuotes.length > 0) {
-                    setQuote(suitableQuotes[0].quote); // Set the first suitable quote
+                    setQuote(suitableQuotes[0].quote); 
                 } else {
                     setQuote('No suitable quote found.');
                 }

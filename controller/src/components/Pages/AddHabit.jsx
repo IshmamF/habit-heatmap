@@ -1,11 +1,8 @@
-import React from 'react'
+import React from 'react';
 
-const AddHabit = () => {
+const AddHabit = ({ theme }) => {
   const username = localStorage.getItem('username');
 
-  // The function sends the data to the backend to be submitted to the database once submit button is clicked
-  // An alert is shown if the habit is created successfully or not to let user know
-  // The user is then redirected to the habits page
   function submitData(event) {
     event.preventDefault(); 
   
@@ -21,7 +18,7 @@ const AddHabit = () => {
         'Content-Type': 'application/json',
         "Authorization": "Bearer " + localStorage.getItem("token")
       },
-      body: JSON.stringify({"username": username, "habitName":title, "metric": metric, "color": color}),
+      body: JSON.stringify({"username": username, "habitName": title, "metric": metric, "color": color}),
     }).then(response => {
       if (response.ok) {
         console.log(response.json());
@@ -32,45 +29,91 @@ const AddHabit = () => {
       }
     }).catch((error) => {
       console.error('Error:', error);
-    }
-    )
+    });
   }
-  
+
   return (
-    <>
-      <form onSubmit={submitData} className="max-w-md mx-auto bg-white shadow-md rounded px-8 mt-12 pt-6 pb-8 mb-4">
-        <h1 className="mx-auto text-black text-lg font-bold text-center pb-4">Create a New Habit:</h1>
+    <div className={`flex items-center justify-center min-h-screen ${theme === 'light' ? 'bg-light-mode' : 'bg-dark-mode'}`}>
+      <form
+        onSubmit={submitData}
+        className={`max-w-md w-full shadow-md rounded px-8 pt-6 pb-8 mb-4 transition-all duration-500 ease-in-out ${
+          theme === 'light' ? 'bg-white' : 'bg-gray-800'
+        }`}
+      >
+        <h1
+          className={`text-lg font-bold text-center pb-4 transition-colors duration-500 ${
+            theme === 'light' ? 'text-black' : 'text-white'
+          }`}
+        >
+          Create a New Habit:
+        </h1>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+          <label
+            className={`block text-sm font-bold mb-2 transition-colors duration-500 ${
+              theme === 'light' ? 'text-gray-700' : 'text-gray-300'
+            }`}
+            htmlFor="title"
+          >
             Title
           </label>
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" type="text" name="title" required/>
+          <input
+            className={`shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none transition-colors duration-500 ${
+              theme === 'light' ? 'text-gray-700 bg-white border-gray-300' : 'text-gray-300 bg-gray-700 border-gray-600'
+            }`}
+            type="text"
+            name="title"
+            required
+          />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="metric">
+          <label
+            className={`block text-sm font-bold mb-2 transition-colors duration-500 ${
+              theme === 'light' ? 'text-gray-700' : 'text-gray-300'
+            }`}
+            htmlFor="metric"
+          >
             Metric
           </label>
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" type="text" name="metric" required/>
+          <input
+            className={`shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none transition-colors duration-500 ${
+              theme === 'light' ? 'text-gray-700 bg-white border-gray-300' : 'text-gray-300 bg-gray-700 border-gray-600'
+            }`}
+            type="text"
+            name="metric"
+            required
+          />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="color">
+          <label
+            className={`block text-sm font-bold mb-2 transition-colors duration-500 ${
+              theme === 'light' ? 'text-gray-700' : 'text-gray-300'
+            }`}
+            htmlFor="color"
+          >
             Pick a color:
           </label>
-          <select className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" name="color">
-              <option value="green">Green</option>
-              <option value="orange">Orange</option>
-              <option value="blue">Blue</option>
+          <select
+            className={`shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none transition-colors duration-500 ${
+              theme === 'light' ? 'text-gray-700 bg-white border-gray-300' : 'text-gray-300 bg-gray-700 border-gray-600'
+            }`}
+            name="color"
+          >
+            <option value="green">Green</option>
+            <option value="orange">Orange</option>
+            <option value="blue">Blue</option>
           </select>
         </div>
         <div className="flex items-center justify-center mt-8">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded " type="submit">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-500"
+            type="submit"
+          >
             Create
           </button>
         </div>
       </form>
-    </>
-  );  
-}
+    </div>
+  );
+};
 
-export default AddHabit
-
+export default AddHabit;

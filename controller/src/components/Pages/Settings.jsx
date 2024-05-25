@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {fetchHabits, selectedHabitDetails } from '../../functions/habits';
+import { fetchHabits, selectedHabitDetails } from '../../functions/habits';
 import HabitOptions from '../habitoptions';
 
-const Settings = () => {
-    const username = useState(localStorage.getItem('username'));
+const Settings = ({ theme }) => {
+    const [username, setUsername] = useState(localStorage.getItem('username'));
     const [habits, setHabits] = useState([]);
     const [selectedHabit, setSelectedHabit] = useState({"habitName": "Select a habit", "metric": "Select a habit", "color": "Select a habit"});
     const [button, setButton] = useState("");
@@ -85,7 +85,6 @@ const Settings = () => {
       e.preventDefault();
       const formData = new FormData(e.target);
       const newUsername = formData.get('username');
-      console.log(newUsername)
       fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/updateUsername', {
         method: 'POST',
         headers: {
@@ -95,6 +94,7 @@ const Settings = () => {
       }).then(response => {
         if (response.ok) {
           localStorage.setItem('username', newUsername);
+          setUsername(newUsername);
           console.log(response.json());
         }
       }).catch((error) => {
@@ -103,41 +103,41 @@ const Settings = () => {
       )
     }
 
-    return(
-      <>
-        <form className="max-w-md mx-auto bg-white shadow-md rounded px-8 mt-12 pt-6 pb-4 mb-4" onSubmit={updateUsername}>
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">Update Username</label>
+    return (
+      <div className={`flex flex-col items-center justify-center min-h-screen ${theme === 'light' ? 'bg-light-mode' : 'bg-dark-mode'}`}>
+        <form className={`max-w-md w-full shadow-md rounded px-8 pt-6 pb-4 mb-4 ${theme === 'light' ? 'bg-white' : 'bg-gray-800'}`} onSubmit={updateUsername}>
+          <label className={`block text-sm font-bold mb-2 ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`} htmlFor="username">Update Username</label>
           <div className="flex items-center space-x-4">
-            <input placeholder={username} className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none flex-grow" type="text" name="username" />
+            <input placeholder={username} className={`shadow appearance-none border rounded py-2 px-3 leading-tight focus:outline-none flex-grow ${theme === 'light' ? 'text-gray-700 bg-white border-gray-300 transition-colors duration-500' : 'text-gray-300 bg-gray-700 border-gray-600 transition-colors duration-500'}`} type="text" name="username" />
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded focus:outline-none mx-auto" type="submit">Update</button>
           </div>
         </form>
-        <form className="max-w-md mx-auto bg-white shadow-md rounded px-8 mt-12 pt-6 pb-8 mb-4" onSubmit={submitData}>
+        <form className={`max-w-md w-full shadow-md rounded px-8 pt-6 pb-8 mb-4 ${theme === 'light' ? 'bg-white' : 'bg-gray-800'}`} onSubmit={submitData}>
           <HabitOptions habits={habits} handleChange={handleChange}></HabitOptions>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+            <label className={`block text-sm font-bold mb-2 ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`} htmlFor="title">
               Title
             </label>
-            <input placeholder={selectedHabit.habitName} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " type="text" name="title" />
+            <input placeholder={selectedHabit.habitName} className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none ${theme === 'light' ? 'bg-white border-gray-300 transition-colors duration-500' : 'bg-gray-700 border-gray-600 transition-colors duration-500'}`} type="text" name="title" />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="metric">
+            <label className={`block text-sm font-bold mb-2 ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`} htmlFor="metric">
               Metric
             </label>
-            <input placeholder={selectedHabit.metric} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " type="text" name="metric" />
+            <input placeholder={selectedHabit.metric} className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none ${theme === 'light' ? 'bg-white border-gray-300 transition-colors duration-500' : 'bg-gray-700 border-gray-600 transition-colors duration-500'}`} type="text" name="metric" />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="color">
+            <label className={`block text-sm font-bold mb-2 ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`} htmlFor="color">
               Pick a color:
             </label>
-            <select className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" name="color">
+            <select className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none ${theme === 'light' ? 'bg-white border-gray-300 transition-colors duration-500' : 'bg-gray-700 border-gray-600 transition-colors duration-500'}`} name="color">
               <option value="green">Green</option>
               <option value="orange">Orange</option>
               <option value="blue">Blue</option>
             </select>
           </div>
           <div className="flex items-center justify-between mt-8">
-            <button onClick={() => setButton("update")} className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none" type="submit" value="update">
+            <button onClick={() => setButton("update")} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none" type="submit" value="update">
               Update
             </button>
             <button onClick={() => setButton("delete")} type="submit" className="bg-slate-400 opacity-50 hover:opacity-100 text-white font-bold py-2 px-4 rounded focus:outline-none" value="delete">
@@ -145,8 +145,8 @@ const Settings = () => {
             </button>
           </div>
         </form>
-      </>
+      </div>
   );
 }
 
-export default Settings
+export default Settings;

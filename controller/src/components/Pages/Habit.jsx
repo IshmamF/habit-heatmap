@@ -13,42 +13,48 @@ const Habit = ({ theme }) => {
     data: []
   });
   const [updatedHabit, setUpdatedHabit] = useState([]);
-
   const [notes, setNotes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     async function loadHabits() {
-      const fetchedHabits = await fetchHabits(username);
-      setHabits(fetchedHabits);
+      try {
+        const fetchedHabits = await fetchHabits(username);
+        setHabits(fetchedHabits);
+      } catch (error) {
+        console.error("Failed to fetch habits", error);
+      }
     }
     loadHabits();
 
-    // Fetch notes
-    fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/get_recent_notes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username }),
-    })
-    .then(response => response.json())
-    .then(data => {
-      setNotes(data.result);
-    });
+    async function loadNotes() {
+      try {
+        const response = await fetch('https://habit-heatmap-api-d98a01d08072.herokuapp.com/api/v1/get_recent_notes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username }),
+        });
+        const data = await response.json();
+        setNotes(data.result || []);
+      } catch (error) {
+        console.error("Failed to fetch notes", error);
+        setNotes([]); // Initialize as an empty array in case of error
+      }
+    }
+    loadNotes();
   }, [username]);
 
   useEffect(() => {
     setUpdatedHabit(selectedHabit.data);
   }, [selectedHabit]);
 
-
   async function handleChange(event) {
     const selected = selectedHabitDetails(event.target.value, habits);
     setSelectedHabit(selected);
     setUpdatedHabit(selected.data);
   }
-
 
   function handleSearchChange(event) {
     setSearchQuery(event.target.value);
@@ -59,9 +65,8 @@ const Habit = ({ theme }) => {
 
   return (
     <div>
-      <HabitOptions habits={habits} handleChange={handleChange}></HabitOptions>
-      <Heatmap selectedHabit={selectedHabit} updatedHabit={updatedHabit} setUpdatedHabit = {setUpdatedHabit} ></Heatmap>
-
+      <HabitOptions habits={habits} handleChange={handleChange} />
+      <Heatmap selectedHabit={selectedHabit} updatedHabit={updatedHabit} setUpdatedHabit={setUpdatedHabit} />
       <div className="mt-8">
         <input
           type="text"
@@ -85,7 +90,7 @@ const Habit = ({ theme }) => {
         </ul>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Habit;
