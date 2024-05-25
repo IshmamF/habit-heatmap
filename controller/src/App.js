@@ -9,12 +9,10 @@ import Settings from './components/Pages/Settings';
 import LoginPage from './components/Pages/Login';
 import SignupPage from './components/Pages/Signup';
 import ProtectedRoute from './components/ProtectedRoute';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './firebase';
 
 const App = () => {
   const [theme, setTheme] = useState(localStorage.getItem('current_theme') || 'light');
-  const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
     localStorage.setItem('current_theme', theme);
