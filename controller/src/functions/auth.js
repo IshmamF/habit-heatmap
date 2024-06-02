@@ -1,4 +1,5 @@
-// functions/auth.js
-export function isAuthenticated() {
-    return !!localStorage.getItem('token');
-}
+import { auth } from '../firebase';
+
+export const isAuthenticated = () => {
+    return auth.currentUser != null;
+};
