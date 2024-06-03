@@ -27,9 +27,11 @@ export default function UpdateMetric({openUpdate, closeUpdateModal, submitUpdate
                         <textarea className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" name="note" rows={4} cols={40} />
                     </div>
                     <div className="flex items-center justify-between mt-8">
+                        {/*
                         <button onClick={() => setButton("update")} className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none" type="submit" value="update">
                             Update
                         </button>
+                        */}
                         <button onClick={() => setButton("delete")} type="submit" className="bg-slate-400 opacity-50 hover:opacity-100 text-white font-bold py-2 px-4 rounded focus:outline-none" value="delete">
                             Delete
                         </button>
